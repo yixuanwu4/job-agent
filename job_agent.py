@@ -1,6 +1,6 @@
 import os
 import requests
-import time
+from datetime import datetime
 from dotenv import load_dotenv
 from anthropic import Anthropic
 
@@ -10,6 +10,9 @@ JOB_ROLE = "Software Developer"
 LOCATION = "ZURICH"
 NUM_RESULTS = 10
 COUNTRY = "ch"
+
+client = Anthropic()
+os.makedirs("outputs", exist_ok=True)
 
 def get_jobs(role: str, location: str, num_results: int, country: str) -> list[dict]:
   app_id = os.environ["ADZUNA_APP_ID"]
@@ -37,8 +40,6 @@ def get_jobs(role: str, location: str, num_results: int, country: str) -> list[d
       "url": j.get("redirect_url", ""),
     })
   return jobs
-
-client = Anthropic();
 
 def call_agent(system_instructions: str, jobs_text: str) -> str:
   response = client.messages.create(
@@ -102,4 +103,6 @@ if __name__ == "__main__":
   )
 
   report = build_report(jobs_text, skills, interview, strategy)
-  print(report)
+  file_name = os.path.join("outputs", "report_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".txt")
+  with open(file_name, "w", encoding="utf-8") as f:
+    f.write(report)
