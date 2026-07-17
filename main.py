@@ -2,7 +2,8 @@ import os
 import requests
 from datetime import datetime
 from dotenv import load_dotenv
-from anthropic import Anthropic
+from claude_client import call_agent
+from resume_analyzer import ResumeAnalyzer
 
 load_dotenv()
 
@@ -11,7 +12,6 @@ LOCATION = "ZURICH"
 NUM_RESULTS = 10
 COUNTRY = "ch"
 
-client = Anthropic()
 os.makedirs("outputs", exist_ok=True)
 
 def get_jobs(role: str, location: str, num_results: int, country: str) -> list[dict]:
@@ -41,25 +41,14 @@ def get_jobs(role: str, location: str, num_results: int, country: str) -> list[d
     })
   return jobs
 
-def call_agent(system_instructions: str, jobs_text: str) -> str:
-  response = client.messages.create(
-    model = "claude-haiku-4-5-20251001",
-    max_tokens = 1500,
-    system = f"Here is the list of jobs we searched for you:\n\n{jobs_text}",
-    messages = [
-      {"role": "user", "content": system_instructions}
-    ]
-  )
-  # print(response.usage)
-  text = "".join(block.text for block in response.content if block.type == "text")
-  return text
-
 def jobs_to_text(jobs: list[dict]) -> str:
   entries = []
   for i, j in enumerate(jobs, 1):
     entry = f"[Job {i}] {j['title']} @ {j['company']} ({j['location']})\n"
-    entry += f"Description: {j['description']}\n"
-    entry += f"Apply here: {j['url']}\n"
+    entry += f"\nDescription: {j['description']}\n"
+    entry += f"\nMatching score: {j['match_score']}\n"
+    entry += f"\nMissing keywords: {j['missing_keywords']}\n"
+    entry += f"\nApply here: {j['url']}\n"
     entries.append(entry)
   return "\n".join(entries)
 
@@ -78,12 +67,22 @@ def build_report(jobs_text: str, skills: str, interview: str, strategy: str) -> 
 
 if __name__ == "__main__":
   jobs = get_jobs(JOB_ROLE, LOCATION, NUM_RESULTS, COUNTRY)
+
+  analyzer = ResumeAnalyzer("cv.pdf")
+  for j in jobs:
+    match = analyzer.score_match(j["description"])
+    j["match_score"] = match["score"]
+    j["missing_keywords"] = match["missing_keywords"]
+
+  jobs.sort(key=lambda j: j["match_score"], reverse=True)
   jobs_text = jobs_to_text(jobs)
 
   skills = call_agent(
     "You are a career skills advisor. Based on the job listings above, "
-    "list the most important skills required across these roles and suggest "
-    "a brief learning path (what to study or build, roughly how long it takes). "
+    "which include a resume match score and missing keywords for each job, "
+    "identify the most common skill gaps and suggest a brief learning path "
+    "(what to study or build, roughly how long it takes) prioritized by which "
+    "gaps show up most often across the lower-scoring jobs. "
     "Keep it under 300 words.",
     jobs_text,
   )
@@ -91,14 +90,18 @@ if __name__ == "__main__":
   interview = call_agent(
     "You are an interview coach. Based on the job listings above, generate "
     "3 likely interview questions for these roles, and briefly explain how "
-    "to answer each one using the STAR method. Keep it under 300 words.",
+    "to answer each one using the STAR method. For jobs with a lower resume "
+    "match score, include a tip on how to address the missing keywords "
+    "proactively during the interview. Keep it under 300 words.",
     jobs_text,
   )
 
   strategy = call_agent(
-    "You are a career strategist. Based on the job listings above, suggest "
-    "3-5 resume keywords to include, and rank the jobs by application priority "
-    "with a one-line reason for each. Keep it under 300 words.",
+    "You are a career strategist. Based on the job listings above, which are "
+    "already ordered by resume match score from highest to lowest, suggest "
+    "3-5 resume keywords to add (drawing from the missing_keywords across jobs) "
+    "and confirm or adjust the application priority order with a one-line reason "
+    "for each, referencing the match score where relevant. Keep it under 300 words.",
     jobs_text,
   )
 
@@ -106,3 +109,4 @@ if __name__ == "__main__":
   file_name = os.path.join("outputs", "report_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".txt")
   with open(file_name, "w", encoding="utf-8") as f:
     f.write(report)
+  
