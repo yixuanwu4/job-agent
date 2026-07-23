@@ -4,6 +4,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from claude_client import call_agent
 from resume_analyzer import ResumeAnalyzer
+from language_detector import LanguageDetector
 
 load_dotenv()
 
@@ -11,17 +12,19 @@ JOB_ROLE = "Software Developer"
 LOCATION = "ZURICH"
 NUM_RESULTS = 10
 COUNTRY = "ch"
+PREFERRED_LANGUAGE = "english"
 
 os.makedirs("outputs", exist_ok=True)
 
-def get_jobs(role: str, location: str, num_results: int, country: str) -> list[dict]:
+def get_matched_jobs(role: str, location: str, num_results: int, country: str, preferred_language: str) -> list[dict]:
+  fetch_count = 50 # Adzuna max fetch number
   app_id = os.environ["ADZUNA_APP_ID"]
   app_key = os.environ["ADZUNA_API_KEY"]
   url = f"https://api.adzuna.com/v1/api/jobs/{country}/search/1"
   params = {
     "app_id": app_id,
     "app_key": app_key,
-    "results_per_page": num_results,
+    "results_per_page": fetch_count,
     "what": role,
     "where": location,
     "content-type": "application/json",
@@ -39,7 +42,9 @@ def get_jobs(role: str, location: str, num_results: int, country: str) -> list[d
       "description": (j.get("description", "") or "")[:800],
       "url": j.get("redirect_url", ""),
     })
-  return jobs
+  detector = LanguageDetector(preferred_language)
+  jobs = detector.filter_jobs_by_language(jobs)
+  return jobs[:num_results]
 
 def jobs_to_text(jobs: list[dict]) -> str:
   entries = []
@@ -66,7 +71,7 @@ def build_report(jobs_text: str, skills: str, interview: str, strategy: str) -> 
   return all_content
 
 if __name__ == "__main__":
-  jobs = get_jobs(JOB_ROLE, LOCATION, NUM_RESULTS, COUNTRY)
+  jobs = get_matched_jobs(JOB_ROLE, LOCATION, NUM_RESULTS, COUNTRY, PREFERRED_LANGUAGE)
 
   analyzer = ResumeAnalyzer("cv.pdf")
   for j in jobs:
