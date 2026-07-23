@@ -1,0 +1,5 @@
+anthropic==0.118.0
+langdetect==1.0.9
+pypdf==6.14.2
+python-dotenv==1.2.2
+Requests==2.34.2

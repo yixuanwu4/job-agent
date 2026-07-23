@@ -1,4 +1,0 @@
-anthropic
-requests
-python-dotenv
-pypdf
