@@ -17,10 +17,12 @@ jobs:
         with:
           python-version: "3.14.3"
       - name: Install dependencies
+        working-directory: backend
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Send daily reports
+        working-directory: backend
         run: python send_daily_reports.python
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY}}
