@@ -1,6 +1,9 @@
-from pypdf import PdfReader
 import json
+
+from pypdf import PdfReader
+
 from claude_client import call_agent
+
 
 class ResumeAnalyzer:
   def __init__(self, resume_path: str):

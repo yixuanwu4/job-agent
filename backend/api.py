@@ -1,10 +1,11 @@
 import os
 import tempfile
-from fastapi import FastAPI, UploadFile, Form
 
-from pipeline import get_matched_jobs, sort_jobs, jobs_to_text
+from fastapi import FastAPI, Form, UploadFile
+
+from agents import get_application_strategy, get_interview_prep, get_skills_advice
+from pipeline import get_matched_jobs, jobs_to_text, sort_jobs
 from resume_analyzer import ResumeAnalyzer
-from agents import get_skills_advice, get_interview_prep, get_application_strategy
 
 app = FastAPI()
 
@@ -54,7 +55,7 @@ async def generate_report(
             "interview_prep": interview,
             "application_strategy": strategy,
         }
-    except Exception as e:
+    except (OSError, ValueError, RuntimeError) as e:
         print(f"Error generating report: {e}")
         return {
             "error": "Something went wrong while generating your report. Please try again."

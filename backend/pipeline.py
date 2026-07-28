@@ -1,8 +1,10 @@
 import os
-import requests
-from language_detector import LanguageDetector
 from datetime import datetime
 from zoneinfo import ZoneInfo
+
+import requests
+
+from language_detector import LanguageDetector
 
 
 def format_date(iso_string: str) -> str:

@@ -1,9 +1,11 @@
 import os
-from datetime import datetime
+from datetime import datetime, timezone
+
 from dotenv import load_dotenv
-from pipeline import get_matched_jobs, jobs_to_text, build_report, sort_jobs
+
+from agents import get_application_strategy, get_interview_prep, get_skills_advice
+from pipeline import build_report, get_matched_jobs, jobs_to_text, sort_jobs
 from resume_analyzer import ResumeAnalyzer
-from agents import get_skills_advice, get_interview_prep, get_application_strategy
 
 load_dotenv()
 
@@ -38,7 +40,7 @@ if __name__ == "__main__":
 
     report = build_report(jobs_text, skills, interview, strategy)
     file_name = os.path.join(
-        "outputs", "report_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".txt"
+        "outputs", "report_" + datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S") + ".txt"
     )
     with open(file_name, "w", encoding="utf-8") as f:
         f.write(report)
