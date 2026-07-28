@@ -2,6 +2,7 @@ import os
 import tempfile
 
 from fastapi import FastAPI, Form, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 from agents import get_application_strategy, get_interview_prep, get_skills_advice
 from pipeline import get_matched_jobs, jobs_to_text, sort_jobs
@@ -9,6 +10,13 @@ from resume_analyzer import ResumeAnalyzer
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://yixuanwu4.github.io"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 @app.get("/health")
 def health_check():
