@@ -5,11 +5,14 @@ from fastapi import FastAPI, UploadFile, Form
 from pipeline import get_matched_jobs, sort_jobs, jobs_to_text
 from resume_analyzer import ResumeAnalyzer
 from agents import get_skills_advice, get_interview_prep, get_application_strategy
+
 app = FastAPI()
+
 
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
+
 
 @app.post("/report")
 async def generate_report(
@@ -28,7 +31,9 @@ async def generate_report(
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
             tmp.write(cv_bytes)
             tmp_path = tmp.name
-        jobs = get_matched_jobs(role, location, num_results, country, preferred_language)
+        jobs = get_matched_jobs(
+            role, location, num_results, country, preferred_language
+        )
         analyzer = ResumeAnalyzer(tmp_path)
 
         for j in jobs:
@@ -51,7 +56,9 @@ async def generate_report(
         }
     except Exception as e:
         print(f"Error generating report: {e}")
-        return {"error": "Something went wrong while generating your report. Please try again."}
+        return {
+            "error": "Something went wrong while generating your report. Please try again."
+        }
     finally:
         if tmp_path:
             os.remove(tmp_path)
