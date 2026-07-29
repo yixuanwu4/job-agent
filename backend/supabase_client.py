@@ -48,9 +48,3 @@ def upload_cv(file_bytes: bytes, filename: str, email: str) -> str:
     )
     return path
 
-
-with open("cv.pdf", "rb") as f:
-    file_bytes = f.read()
-
-path = upload_cv(file_bytes, "cv.pdf", "test@example.com")
-print(path)
