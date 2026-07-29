@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from agents import get_application_strategy, get_interview_prep, get_skills_advice
 from pipeline import get_matched_jobs, jobs_to_text, sort_jobs
 from resume_analyzer import ResumeAnalyzer
+from supabase_client import add_subscriber, upload_cv
 
 app = FastAPI()
 
@@ -63,7 +64,7 @@ async def generate_report(
             "interview_prep": interview,
             "application_strategy": strategy,
         }
-    except (OSError, ValueError, RuntimeError) as e:
+    except Exception as e:
         print(f"Error generating report: {e}")
         return {
             "error": "Something went wrong while generating your report. Please try again."
@@ -71,3 +72,35 @@ async def generate_report(
     finally:
         if tmp_path:
             os.remove(tmp_path)
+
+
+@app.post("/subscribe")
+async def create_subscription(
+    cv: UploadFile, 
+    role: str = Form(...),
+    location: str = Form(...),
+    country: str = Form(...),
+    preferred_language: str = Form(...),
+    email: str = Form(...)
+):
+    try:
+        cv_bytes = await cv.read()
+        file_name = cv.filename
+        cv_storage_path = upload_cv(cv_bytes, file_name, email)
+
+        add_subscriber(
+            email,
+            role,
+            location,
+            country,
+            preferred_language,
+            cv_storage_path,
+        )
+
+        print("Subscribed!")
+        return {"status": "subscribed", "email": email}
+    except Exception as e:
+            print(f"Error subscribing our website: {e}")
+            return {
+                "error": "Something went wrong while subscribing. Please try again."
+            }

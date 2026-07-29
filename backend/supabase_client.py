@@ -46,6 +46,7 @@ def upload_cv(file_bytes: bytes, filename: str, email: str) -> str:
     supabase.storage.from_("resumes").upload(
         path=path, file=file_bytes, file_options={"upsert": "true"}
     )
+    return path
 
 
 with open("cv.pdf", "rb") as f:
