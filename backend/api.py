@@ -9,6 +9,8 @@ from pipeline import get_matched_jobs, jobs_to_text, sort_jobs
 from resume_analyzer import ResumeAnalyzer
 from supabase_client import add_subscriber, upload_cv
 
+from countries import get_country_code
+
 app = FastAPI()
 
 app.add_middleware(
@@ -16,8 +18,9 @@ app.add_middleware(
     allow_origins=["https://yixuanwu4.github.io"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
+
 
 @app.get("/health")
 def health_check():
@@ -41,8 +44,9 @@ async def generate_report(
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
             tmp.write(cv_bytes)
             tmp_path = tmp.name
+        country_code = get_country_code(country)
         jobs = get_matched_jobs(
-            role, location, num_results, country, preferred_language
+            role, location, num_results, country_code, preferred_language
         )
         analyzer = ResumeAnalyzer(tmp_path)
 
@@ -64,6 +68,9 @@ async def generate_report(
             "interview_prep": interview,
             "application_strategy": strategy,
         }
+    except ValueError as e:
+        print(f"Error finding target country: {e}")
+        return {"error": f"'{country} is not a supported country yet.'"}
     except Exception as e:
         print(f"Error generating report: {e}")
         return {
@@ -76,31 +83,32 @@ async def generate_report(
 
 @app.post("/subscribe")
 async def create_subscription(
-    cv: UploadFile, 
+    cv: UploadFile,
     role: str = Form(...),
     location: str = Form(...),
     country: str = Form(...),
     preferred_language: str = Form(...),
-    email: str = Form(...)
+    email: str = Form(...),
 ):
     try:
         cv_bytes = await cv.read()
         file_name = cv.filename
         cv_storage_path = upload_cv(cv_bytes, file_name, email)
-
+        country_code = get_country_code(country)
         add_subscriber(
             email,
             role,
             location,
-            country,
+            country_code,
             preferred_language,
             cv_storage_path,
         )
 
         print("Subscribed!")
         return {"status": "subscribed", "email": email}
+    except ValueError as e:
+        print(f"Error finding target country: {e}")
+        return {"error": f"'{country} is not a supported country yet.'"}
     except Exception as e:
-            print(f"Error subscribing our website: {e}")
-            return {
-                "error": "Something went wrong while subscribing. Please try again."
-            }
+        print(f"Error subscribing our website: {e}")
+        return {"error": "Something went wrong while subscribing. Please try again."}
