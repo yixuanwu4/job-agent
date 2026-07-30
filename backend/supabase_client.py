@@ -20,7 +20,7 @@ def add_subscriber(
 ):
     response = (
         supabase.table("subscribers")
-        .insert(
+        .upsert(
             {
                 "email": email,
                 "role": role,
@@ -29,7 +29,8 @@ def add_subscriber(
                 "preferred_language": preferred_language,
                 "cv_storage_path": cv_storage_path,
                 "active": True,
-            }
+            },
+            on_conflict="email",
         )
         .execute()
     )
@@ -42,9 +43,9 @@ def get_active_subscribers():
 
 
 def upload_cv(file_bytes: bytes, filename: str, email: str) -> str:
-    path = f"{email}/{filename}"
+    suffix = os.path.splitext(filename)[1]
+    path = f"{email}/cv{suffix}"
     supabase.storage.from_("resumes").upload(
         path=path, file=file_bytes, file_options={"upsert": "true"}
     )
     return path
-
