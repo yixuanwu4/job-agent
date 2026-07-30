@@ -211,3 +211,5 @@ __marimo__/
 .streamlit/secrets.toml
 
 node_modules/
+
+.pnpm-store/
