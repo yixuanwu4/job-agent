@@ -210,5 +210,4 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-backend/cv.pdf
-backend/outputs
+node_modules/
