@@ -1,6 +1,11 @@
+<script setup lang="ts">
+import SearchForm from '@/components/SearchForm.vue';
+</script>
+
 <template>
   <div class="tool">
     <h1>This is the tool page</h1>
+    <SearchForm />
   </div>
 </template>
 
