@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import SearchForm from '@/components/SearchForm.vue';
+import type { ReportResponse } from '@/types'
+import ReportResults from '@/components/ReportResults.vue';
 
 interface SearchPayload {
   cv: File | null
@@ -8,24 +10,6 @@ interface SearchPayload {
   location: string
   country: string
   preferred_language: string
-}
-
-interface JobResult {
-  title: string
-  company: string
-  location: string
-  description: string
-  url: string
-  posted_date: string
-  match_score: number
-  missing_keywords: string[]
-}
-
-interface ReportResponse {
-  jobs: JobResult[]
-  skills_advice: string
-  interview_prep: string
-  application_strategy: string
 }
 
 const report = ref<ReportResponse | null>(null)
@@ -79,7 +63,7 @@ async function handleSubmit(payload: SearchPayload) {
 
     <p v-if="isLoading">Generating your report... this can take up to a minute.</p>
     <p v-else-if="errorMessage">{{ errorMessage }}</p>
-    <pre v-else-if="report">{{ report }}</pre>
+    <ReportResults v-else-if="report" :report="report" />
   </div>
 </template>
 
