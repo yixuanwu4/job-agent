@@ -10,6 +10,7 @@ interface SearchPayload {
   location: string
   country: string
   preferred_language: string
+  sort_by: string
 }
 
 const report = ref<ReportResponse | null>(null)
@@ -36,6 +37,7 @@ async function handleSubmit(payload: SearchPayload) {
   formData.append('location', payload.location)
   formData.append('country', payload.country)
   formData.append('preferred_language', payload.preferred_language)
+  formData.append('sort_by', payload.sort_by)
 
   try {
     const response = await fetch(url, { method: 'POST', body: formData })

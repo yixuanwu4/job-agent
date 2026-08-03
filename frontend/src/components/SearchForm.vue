@@ -6,6 +6,7 @@ const role = ref("")
 const location = ref("")
 const country = ref("")
 const preferred_language = ref("")
+const sort_by = ref('score')
 
 function get_cv(event: Event){
     const target = event.target as HTMLInputElement
@@ -19,6 +20,7 @@ const emit = defineEmits<{
         location: string
         country: string
         preferred_language: string
+        sort_by: string
     }]
 }>()
 
@@ -28,7 +30,8 @@ const handleSubmit = () => {
         role: role.value,
         location: location.value,
         country: country.value,
-        preferred_language: preferred_language.value
+        preferred_language: preferred_language.value,
+        sort_by: sort_by.value
     })
 }
 </script>
@@ -51,6 +54,12 @@ const handleSubmit = () => {
             </label>
             <label>Preferred job posting language 
                 <input type="text" v-model="preferred_language" placeholder="e.g. English" />
+            </label>
+            <label>Sort by
+                <select id="sort-by" v-model="sort_by">
+                    <option value="score">Match score</option>
+                    <option value="date">Posting date</option>
+                </select>
             </label>
             <button type="submit">Get my report</button>
         </div>
