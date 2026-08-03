@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import SearchForm from '@/components/SearchForm.vue';
+import { ref } from 'vue'
+import SearchForm from '@/components/SearchForm.vue'
 import type { ReportResponse } from '@/types'
-import ReportResults from '@/components/ReportResults.vue';
+import ReportResults from '@/components/ReportResults.vue'
 
 interface SearchPayload {
   cv: File | null
@@ -16,7 +16,6 @@ interface SearchPayload {
 const report = ref<ReportResponse | null>(null)
 const isLoading = ref(false)
 const errorMessage = ref('')
-
 
 async function handleSubmit(payload: SearchPayload) {
   if (!payload.cv) {
@@ -55,7 +54,6 @@ async function handleSubmit(payload: SearchPayload) {
   } finally {
     isLoading.value = false
   }
-
 }
 </script>
 
