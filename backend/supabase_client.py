@@ -49,3 +49,17 @@ def upload_cv(file_bytes: bytes, filename: str, email: str) -> str:
         path=path, file=file_bytes, file_options={"upsert": "true"}
     )
     return path
+
+def download_cv(cv_storage_path: str) -> bytes:
+    response = supabase.storage.from_("resumes").download(cv_storage_path)
+    return response
+
+def get_subscriber_by_token(token: str) -> dict | None:
+    response = supabase.table("subscribers").select("*").eq("token", token).execute()
+    if not response.data:
+        return None
+    subscriber = response.data[0]
+    if not subscriber["active"]:
+        return None
+    return subscriber
+    
