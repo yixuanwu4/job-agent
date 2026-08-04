@@ -3,7 +3,7 @@ import tempfile
 
 from email_client import send_email
 from email_template import build_digest_html
-from pipeline import get_matched_jobs_multi, sort_jobs, parse_roles, filter_jobs_by_age
+from pipeline import filter_jobs_by_age, get_matched_jobs_multi, parse_roles, sort_jobs
 from resume_analyzer import ResumeAnalyzer
 from supabase_client import download_cv, get_active_subscribers
 

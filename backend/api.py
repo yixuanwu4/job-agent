@@ -6,7 +6,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from agents import get_application_strategy, get_interview_prep, get_skills_advice
 from countries import get_country_code
-from pipeline import get_matched_jobs, jobs_to_text, sort_jobs, parse_roles, get_matched_jobs_multi
+from pipeline import (
+    get_matched_jobs_multi,
+    jobs_to_text,
+    parse_roles,
+    sort_jobs,
+)
 from resume_analyzer import ResumeAnalyzer
 from supabase_client import (
     add_subscriber,
