@@ -1,8 +1,8 @@
 name: Daily Report
 
 on:
-  # schedule:
-  #   - cron: "0 2 * * *"
+  schedule:
+    - cron: "0 2 * * *"
 
   workflow_dispatch:
 
@@ -23,7 +23,7 @@ jobs:
           pip install -r requirements.txt
       - name: Send daily reports
         working-directory: backend
-        run: python send_daily_reports.python
+        run: python send_daily_reports.py
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY}}
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
@@ -31,3 +31,4 @@ jobs:
           EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
           EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY}}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
