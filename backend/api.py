@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from agents import get_application_strategy, get_interview_prep, get_skills_advice
 from countries import get_country_code
-from pipeline import get_matched_jobs, jobs_to_text, sort_jobs
+from pipeline import get_matched_jobs, jobs_to_text, sort_jobs, parse_roles, get_matched_jobs_multi
 from resume_analyzer import ResumeAnalyzer
 from supabase_client import (
     add_subscriber,
@@ -51,12 +51,12 @@ async def generate_report(
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
             tmp.write(cv_bytes)
             tmp_path = tmp.name
-        country_code = get_country_code(country)
-        jobs = get_matched_jobs(
-            role, location, num_results, country_code, preferred_language
-        )
-        analyzer = ResumeAnalyzer(tmp_path)
 
+        country_code = get_country_code(country)
+        roles = parse_roles(role)
+        jobs = get_matched_jobs_multi(roles, location, num_results, country_code, preferred_language)
+
+        analyzer = ResumeAnalyzer(tmp_path)
         for j in jobs:
             match = analyzer.score_match(j["description"])
             j["match_score"] = match["score"]
@@ -102,6 +102,7 @@ async def create_subscription(
         file_name = cv.filename
         cv_storage_path = upload_cv(cv_bytes, file_name, email)
         country_code = get_country_code(country)
+        parse_roles(role)
         add_subscriber(
             email,
             role,
@@ -133,8 +134,10 @@ async def get_report_by_token(token: str):
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
             tmp.write(cv_bytes)
             tmp_path = tmp.name
-        jobs = get_matched_jobs(
-            subscriber["role"], subscriber["location"], 10, subscriber["country"], subscriber["preferred_language"],
+
+        roles = parse_roles(subscriber["role"])
+        jobs = get_matched_jobs_multi(
+            roles, subscriber["location"], 10, subscriber["country"], subscriber["preferred_language"],
         )
 
         analyzer = ResumeAnalyzer(tmp_path)

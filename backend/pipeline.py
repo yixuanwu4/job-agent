@@ -1,11 +1,23 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 import requests
 
 from language_detector import LanguageDetector
 
+
+def filter_jobs_by_age(jobs: list[dict], max_age_days: int) -> list[dict]:
+    cutoff = datetime.now(timezone.utc) - timedelta(days=max_age_days)
+    filtered = []
+    for j in jobs:
+        try:
+            posted = datetime.fromisoformat(j["posted_date"])
+        except (ValueError, KeyError):
+            continue
+        if posted >= cutoff:
+            filtered.append(j)
+    return filtered
 
 def format_date(iso_string: str) -> str:
     try:
@@ -15,6 +27,11 @@ def format_date(iso_string: str) -> str:
     except ValueError:
         return "Unknown"
 
+def parse_roles(role_string: str) -> list[str]:
+    roles = [r.strip() for r in role_string.split(",") if r.strip()]
+    if len(roles) < 3:
+        raise ValueError("Please enter at least 3 job titles, separated by commas.")
+    return roles
 
 def get_matched_jobs(
     role: str, location: str, num_results: int, country: str, preferred_language: str
@@ -50,6 +67,20 @@ def get_matched_jobs(
     detector = LanguageDetector(preferred_language)
     jobs = detector.filter_jobs_by_language(jobs)
     return jobs[:num_results]
+
+
+def get_matched_jobs_multi(roles: list[str], location: str, num_results: int, country: str, preferred_language: str) -> list[dict]:
+    all_jobs = []
+    seen_urls = set()
+    for role in roles:
+        jobs = get_matched_jobs(role, location, num_results, country, preferred_language)
+        print(f"'{role}' returned {len(jobs)} jobs") 
+        for j in jobs:
+            if j["url"] not in seen_urls:
+                seen_urls.add(j["url"])
+                all_jobs.append(j)
+    print(f"After dedup: {len(all_jobs)} unique jobs")  
+    return all_jobs[:num_results]
 
 
 def sort_jobs(jobs: list[dict], sort_by: str = "match_score") -> list[dict]:

@@ -3,7 +3,7 @@ import tempfile
 
 from email_client import send_email
 from email_template import build_digest_html
-from pipeline import get_matched_jobs, sort_jobs
+from pipeline import get_matched_jobs_multi, sort_jobs, parse_roles, filter_jobs_by_age
 from resume_analyzer import ResumeAnalyzer
 from supabase_client import download_cv, get_active_subscribers
 
@@ -18,10 +18,13 @@ def process_subscriber(subscriber: dict):
             tmp.write(cv_bytes)
             tmp_path = tmp.name
 
-        jobs = get_matched_jobs(
-            subscriber["role"], subscriber["location"], 10,
+        roles = parse_roles(subscriber["role"])
+        jobs = get_matched_jobs_multi(
+            roles, subscriber["location"], 50,
             subscriber["country"], subscriber["preferred_language"],
         )
+        jobs = filter_jobs_by_age(jobs, max_age_days=1)
+        print(f"After 24h filter: {len(jobs)} jobs")
 
         if not jobs:
             print(f"No jobs found for {subscriber['email']}, skipping email.")
