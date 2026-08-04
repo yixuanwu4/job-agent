@@ -1,11 +1,11 @@
 import os
 import tempfile
 
-from pipeline import get_matched_jobs, sort_jobs
-from resume_analyzer import ResumeAnalyzer
-from supabase_client import get_active_subscribers, download_cv
 from email_client import send_email
 from email_template import build_digest_html
+from pipeline import get_matched_jobs, sort_jobs
+from resume_analyzer import ResumeAnalyzer
+from supabase_client import download_cv, get_active_subscribers
 
 REPORT_BASE_URL = "https://yixuanwu4.github.io/job-agent/tool"
 
@@ -24,7 +24,7 @@ def process_subscriber(subscriber: dict):
         )
 
         if not jobs:
-            print((f"No jobs found for {subscriber['email']}, skipping email."))
+            print(f"No jobs found for {subscriber['email']}, skipping email.")
             return
 
         analyzer = ResumeAnalyzer(tmp_path)
