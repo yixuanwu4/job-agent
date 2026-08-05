@@ -15,3 +15,11 @@ export interface ReportResponse {
   interview_prep: string
   application_strategy: string
 }
+
+export interface SubscriberInfo {
+  email: string
+  role: string
+  location: string
+  country: string
+  preferred_language: string
+}

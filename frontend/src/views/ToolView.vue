@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import SearchForm from '@/components/SearchForm.vue'
-import type { ReportResponse } from '@/types'
+import { type SubscriberInfo, type ReportResponse } from '@/types'
 import ReportResults from '@/components/ReportResults.vue'
 
 interface SearchPayload {
@@ -16,6 +17,25 @@ interface SearchPayload {
 const report = ref<ReportResponse | null>(null)
 const isLoading = ref(false)
 const errorMessage = ref('')
+
+const route = useRoute()
+const subscriberInfo = ref<SubscriberInfo | null>(null)
+const tokenError = ref('')
+
+onMounted(async () => {
+  const token = route.query.token as string
+  if (!token) return
+
+  const response = await fetch(
+    `https://job-agent-odvr.onrender.com/subscriber-by-token?token=${token}`,
+  )
+  const data = await response.json()
+  if (data.error) {
+    tokenError.value = data.error
+    return
+  }
+  subscriberInfo.value = data
+})
 
 async function handleSubmit(payload: SearchPayload) {
   if (!payload.cv) {
@@ -60,6 +80,9 @@ async function handleSubmit(payload: SearchPayload) {
 <template>
   <div class="tool">
     <SearchForm @submit-search="handleSubmit" />
+
+    <pre v-if="subscriberInfo">{{ subscriberInfo }}</pre>
+    <p v-if="tokenError">{{ tokenError }}</p>
 
     <p v-if="isLoading">Generating your report... this can take up to a minute.</p>
     <p v-else-if="errorMessage">{{ errorMessage }}</p>

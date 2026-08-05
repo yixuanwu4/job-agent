@@ -170,3 +170,16 @@ async def get_report_by_token(token: str):
     finally: 
         if tmp_path:
             os.remove(tmp_path)
+
+@app.get("/subscriber-by-token")
+async def get_subscriber_info(token: str):
+    subscriber = get_subscriber_by_token(token)
+    if subscriber is None:
+        return {"error": "This link is no longer valid."}
+    return {
+        "email": subscriber["email"],
+        "role": subscriber["role"],
+        "location": subscriber["location"],
+        "country": subscriber["country"],
+        "preferred_language": subscriber["preferred_language"],
+    }
