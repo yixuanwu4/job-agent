@@ -47,8 +47,8 @@ const handleSubmit = () => {
         <input type="file" id="file" @change="get_cv" accept=".pdf, .txt" />
       </label>
       <label
-        >Desired job title
-        <input type="text" v-model="role" placeholder="e.g. Frontend Developer" />
+        >Desired job titles (comma-separated, at least 3)
+        <input type="text" v-model="role" placeholder="e.g. Frontend Developer, UI Engineer, Web Developer" />
       </label>
       <label
         >Location
