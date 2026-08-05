@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def send_email(to_address: str, subject: str, html_body: str):
+def send_email(to_address: str, subject: str, html_body: str, text_body: str):
     from_address = os.environ["EMAIL_ADDRESS"]
     app_password = os.environ["EMAIL_APP_PASSWORD"]
 
@@ -16,6 +16,7 @@ def send_email(to_address: str, subject: str, html_body: str):
     msg["To"] = to_address
     msg["Subject"] = subject
 
+    msg.attach(MIMEText(text_body, "plain"))
     msg.attach(MIMEText(html_body, "html"))
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:

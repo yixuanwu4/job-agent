@@ -32,3 +32,11 @@ def build_digest_html(jobs: list[dict], report_url:str) -> str:
         </table>
     </div>
     """
+
+def build_digest_text(jobs: list[dict], report_url:str) -> str:
+    lines = [f"{len(jobs)} new opportunities today\n"]
+    for j in jobs:
+        lines.append(f"- {j['title']} at {j['company']} ({j['location']})")
+        lines.append(f"  {j['url']}\n")
+    lines.append(f"View full report: {report_url}")
+    return "\n".join(lines)

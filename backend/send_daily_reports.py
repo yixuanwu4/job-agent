@@ -2,7 +2,7 @@ import os
 import tempfile
 
 from email_client import send_email
-from email_template import build_digest_html
+from email_template import build_digest_html, build_digest_text
 from pipeline import filter_jobs_by_age, get_matched_jobs_multi, parse_roles, sort_jobs
 from resume_analyzer import ResumeAnalyzer
 from supabase_client import download_cv, get_active_subscribers
@@ -38,7 +38,8 @@ def process_subscriber(subscriber: dict):
 
         report_url = f"{REPORT_BASE_URL}?token={subscriber['token']}"
         html = build_digest_html(jobs, report_url)
-        send_email (subscriber["email"], f"{len(jobs)} new job matches today", html)
+        text = build_digest_text(jobs, report_url)
+        send_email (subscriber["email"], f"{len(jobs)} new job matches today", html, text)
         print(f"Sent to {subscriber['email']}")
 
     except Exception as e:
