@@ -48,7 +48,11 @@ const handleSubmit = () => {
       </label>
       <label
         >Desired job titles (comma-separated, at least 3)
-        <input type="text" v-model="role" placeholder="e.g. Frontend Developer, UI Engineer, Web Developer" />
+        <input
+          type="text"
+          v-model="role"
+          placeholder="e.g. Frontend Developer, UI Engineer, Web Developer"
+        />
       </label>
       <label
         >Location
