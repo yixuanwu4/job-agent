@@ -19,3 +19,9 @@ def get_country_code(country_name: str) -> str:
     if country not in COUNTRY_CODES:
         raise ValueError(f"'{country_name}' is not a supported country yet.")
     return COUNTRY_CODES[country]
+
+def get_country_name(country_code: str) -> str:
+    for name, code in COUNTRY_CODES.items():
+        if code == country_code:
+            return name.title()
+    return country_code

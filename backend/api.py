@@ -5,7 +5,7 @@ from fastapi import FastAPI, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from agents import get_application_strategy, get_interview_prep, get_skills_advice
-from countries import get_country_code
+from countries import get_country_code, get_country_name
 from pipeline import (
     get_matched_jobs_multi,
     jobs_to_text,
@@ -16,6 +16,7 @@ from resume_analyzer import ResumeAnalyzer
 from supabase_client import (
     add_subscriber,
     download_cv,
+    get_subscriber_by_email,
     get_subscriber_by_token,
     upload_cv,
 )
@@ -95,7 +96,7 @@ async def generate_report(
 
 @app.post("/subscribe")
 async def create_subscription(
-    cv: UploadFile,
+    cv: UploadFile | None = None,
     role: str = Form(...),
     location: str = Form(...),
     country: str = Form(...),
@@ -103,11 +104,18 @@ async def create_subscription(
     email: str = Form(...),
 ):
     try:
-        cv_bytes = await cv.read()
-        file_name = cv.filename
-        cv_storage_path = upload_cv(cv_bytes, file_name, email)
         country_code = get_country_code(country)
         parse_roles(role)
+
+        if cv is not None:
+            cv_bytes = await cv.read()
+            file_name = cv.filename
+            cv_storage_path = upload_cv(cv_bytes, file_name, email)
+        else:
+            existing = get_subscriber_by_email(email)
+            if existing is None or not existing.get("cv_storage_path"):
+                return {"error": "Please upload your CV."}
+            cv_storage_path = existing["cv_storage_path"]
         add_subscriber(
             email,
             role,
@@ -116,7 +124,6 @@ async def create_subscription(
             preferred_language,
             cv_storage_path,
         )
-
         print("Subscribed!")
         return {"status": "subscribed", "email": email}
     except ValueError as e:
@@ -180,6 +187,6 @@ async def get_subscriber_info(token: str):
         "email": subscriber["email"],
         "role": subscriber["role"],
         "location": subscriber["location"],
-        "country": subscriber["country"],
+        "country": get_country_name(subscriber["country"]),
         "preferred_language": subscriber["preferred_language"],
     }

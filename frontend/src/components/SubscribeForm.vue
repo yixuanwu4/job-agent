@@ -48,7 +48,7 @@ function get_cv(event: Event) {
 function handleSubmit() {
   emit('submit-subscribe', {
     cv: cv.value,
-    email: email.value,
+    email: props.initialData?.email ?? '',
     role: role.value,
     location: location.value,
     country: country.value,
@@ -58,11 +58,11 @@ function handleSubmit() {
 </script>
 
 <template>
-  <h1>Subscriber Information</h1>
+  <h1>Hello {{ initialData?.email }}, update your information below</h1>
   <form @submit.prevent="handleSubmit">
     <div class="container">
       <label
-        >Update your CV (PDF or TXT)
+        >Update your CV (optional — leave empty to keep your current one)
         <input type="file" id="file" @change="get_cv" accept=".pdf, .txt" />
       </label>
       <label

@@ -62,4 +62,9 @@ def get_subscriber_by_token(token: str) -> dict | None:
     if not subscriber["active"]:
         return None
     return subscriber
-    
+
+def get_subscriber_by_email(email: str) -> dict | None:
+    response = supabase.table("subscribers").select("*").eq("email", email).execute()
+    if not response.data:
+        return None
+    return response.data[0]
