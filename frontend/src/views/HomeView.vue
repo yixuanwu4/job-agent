@@ -26,7 +26,7 @@ import { RouterLink } from 'vue-router'
         </RouterLink>
 
         <RouterLink to="/tool?mode=subscribe" class="path-card path-card--subscribe">
-          <h2>Get daily matches</h2>
+          <h2>Subscribe and get daily matches</h2>
           <p>
             A short email each morning with new postings that fit — plus a link to update your
             search or stop anytime.

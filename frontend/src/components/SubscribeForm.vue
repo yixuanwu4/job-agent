@@ -10,7 +10,6 @@ const emit = defineEmits<{
   'submit-subscribe': [
     payload: {
       cv: File | null
-      email: string
       role: string
       location: string
       country: string
@@ -48,7 +47,6 @@ function get_cv(event: Event) {
 function handleSubmit() {
   emit('submit-subscribe', {
     cv: cv.value,
-    email: props.initialData?.email ?? '',
     role: role.value,
     location: location.value,
     country: country.value,
@@ -58,7 +56,8 @@ function handleSubmit() {
 </script>
 
 <template>
-  <h1>Hello {{ initialData?.email }}, update your information below</h1>
+  <h1>Hello {{ initialData?.email }}</h1>
+  <p class="form-intro">Fill in or update your job search details below.</p>
   <form @submit.prevent="handleSubmit">
     <div class="container">
       <label

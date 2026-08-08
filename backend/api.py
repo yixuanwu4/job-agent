@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from agents import get_application_strategy, get_interview_prep, get_skills_advice
 from countries import get_country_code, get_country_name
+from email_client import send_email
+from email_template import build_update_link_html, build_update_link_text
 from pipeline import (
     get_matched_jobs_multi,
     jobs_to_text,
@@ -15,8 +17,8 @@ from pipeline import (
 from resume_analyzer import ResumeAnalyzer
 from supabase_client import (
     add_subscriber,
+    create_subscriber_placeholder,
     download_cv,
-    get_subscriber_by_email,
     get_subscriber_by_token,
     upload_cv,
 )
@@ -34,6 +36,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+FRONTEND_BASE_URL = "https://yixuanwu4.github.io/job-agent"
 
 @app.get("/health")
 def health_check():
@@ -101,8 +104,13 @@ async def create_subscription(
     location: str = Form(...),
     country: str = Form(...),
     preferred_language: str = Form(...),
-    email: str = Form(...),
+    token: str = Form(...),
 ):
+    subscriber= get_subscriber_by_token(token)
+    if subscriber is None:
+        return {"error": "This link is no longer valid."}
+    email = subscriber["email"]
+
     try:
         country_code = get_country_code(country)
         parse_roles(role)
@@ -112,10 +120,10 @@ async def create_subscription(
             file_name = cv.filename
             cv_storage_path = upload_cv(cv_bytes, file_name, email)
         else:
-            existing = get_subscriber_by_email(email)
-            if existing is None or not existing.get("cv_storage_path"):
+            if not subscriber.get("cv_storage_path"):
                 return {"error": "Please upload your CV."}
-            cv_storage_path = existing["cv_storage_path"]
+            cv_storage_path = subscriber["cv_storage_path"]
+
         add_subscriber(
             email,
             role,
@@ -190,3 +198,16 @@ async def get_subscriber_info(token: str):
         "country": get_country_name(subscriber["country"]),
         "preferred_language": subscriber["preferred_language"],
     }
+
+@app.post("/request-subscribe-link")
+async def request_subscribe_link(email: str = Form(...)):
+    try:
+        subscriber = create_subscriber_placeholder(email)
+        manage_url = f"{FRONTEND_BASE_URL}/tool?token={subscriber['token']}"
+        html = build_update_link_html(manage_url)
+        text = build_update_link_text(manage_url)
+        send_email(email, "Update your job search details", html, text)
+        return {"status": "sent"}
+    except Exception as e:
+        print(f"Error sending subscribe link: {e}")
+        return {"error": "Something went wrong, please try again."}

@@ -36,9 +36,11 @@ def process_subscriber(subscriber: dict):
             j["match_score"] = match["score"]
         jobs = sort_jobs(jobs, "match_score")
 
-        report_url = f"{REPORT_BASE_URL}?token={subscriber['token']}"
-        html = build_digest_html(jobs, report_url)
-        text = build_digest_text(jobs, report_url)
+        report_url = f"{REPORT_BASE_URL}?report_token={subscriber['token']}"
+        report_url = f"{REPORT_BASE_URL}?report_token={subscriber['token']}"
+        manage_url = f"{REPORT_BASE_URL}?token={subscriber['token']}"
+        html = build_digest_html(jobs, report_url, manage_url)
+        text = build_digest_text(jobs, report_url, manage_url)
         send_email (subscriber["email"], f"{len(jobs)} new job matches today", html, text)
         print(f"Sent to {subscriber['email']}")
 

@@ -5,6 +5,7 @@ import SearchForm from '@/components/SearchForm.vue'
 import SubscribeForm from '@/components/SubscribeForm.vue'
 import { type SubscriberInfo, type ReportResponse } from '@/types'
 import ReportResults from '@/components/ReportResults.vue'
+import RequestLinkForm from '@/components/RequestLinkForm.vue'
 
 interface SearchPayload {
   cv: File | null
@@ -29,18 +30,34 @@ const subscribeError = ref('')
 const subscribeSuccess = ref(false)
 
 onMounted(async () => {
-  const token = route.query.token as string
-  if (!token) return
+  const editToken = route.query.token as string
+  const reportToken = route.query.report_token as string
 
-  const response = await fetch(
-    `https://job-agent-odvr.onrender.com/subscriber-by-token?token=${token}`,
-  )
-  const data = await response.json()
-  if (data.error) {
-    tokenError.value = data.error
-    return
+  if (editToken) {
+    const response = await fetch(
+      `https://job-agent-odvr.onrender.com/subscriber-by-token?token=${editToken}`,
+    )
+    const data = await response.json()
+    if (data.error) {
+      tokenError.value = data.error
+      return
+    }
+    subscriberInfo.value = data
   }
-  subscriberInfo.value = data
+
+  if (reportToken) {
+    isLoading.value = true
+    const response = await fetch(
+      `https://job-agent-odvr.onrender.com/report-by-token?token=${reportToken}`,
+    )
+    const data = await response.json()
+    isLoading.value = false
+    if (data.error) {
+      errorMessage.value = data.error
+      return
+    }
+    report.value = data
+  }
 })
 
 async function handleSubmit(payload: SearchPayload) {
@@ -84,7 +101,6 @@ async function handleSubmit(payload: SearchPayload) {
 
 async function handleSubscribeSubmit(payload: {
   cv: File | null
-  email: string
   role: string
   location: string
   country: string
@@ -95,12 +111,13 @@ async function handleSubscribeSubmit(payload: {
   subscribeSuccess.value = false
 
   const url = 'https://job-agent-odvr.onrender.com/subscribe'
+  const editToken = route.query.token as string
 
   const formData = new FormData()
   if (payload.cv) {
     formData.append('cv', payload.cv)
   }
-  formData.append('email', payload.email)
+  formData.append('token', editToken)
   formData.append('role', payload.role)
   formData.append('location', payload.location)
   formData.append('country', payload.country)
@@ -129,8 +146,10 @@ async function handleSubscribeSubmit(payload: {
   <div class="tool">
     <SearchForm v-if="!subscriberInfo && !subscribeMode" @submit-search="handleSubmit" />
 
+    <RequestLinkForm v-if="subscribeMode && !subscriberInfo" />
+
     <SubscribeForm
-      v-if="subscriberInfo || subscribeMode"
+      v-if="subscriberInfo"
       :initial-data="subscriberInfo"
       @submit-subscribe="handleSubscribeSubmit"
     />
