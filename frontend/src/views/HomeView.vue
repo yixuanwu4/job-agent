@@ -55,7 +55,6 @@ import { RouterLink } from 'vue-router'
 
 .hero h1 {
   font-size: var(--text-hero);
-  margin-bottom: var(--space-4);
 }
 
 .hero-sub {

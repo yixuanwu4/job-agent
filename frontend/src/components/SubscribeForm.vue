@@ -56,39 +56,41 @@ function handleSubmit() {
 </script>
 
 <template>
-  <h1>Hello {{ initialData?.email }}</h1>
-  <p class="form-intro">Fill in or update your job search details below.</p>
-  <form @submit.prevent="handleSubmit">
-    <div class="container">
-      <label
-        >Update your CV (optional — leave empty to keep your current one)
-        <input type="file" id="file" @change="get_cv" accept=".pdf, .txt" />
-      </label>
-      <label
-        >Update desired job titles (comma-separated, at least 3)
-        <input
-          type="text"
-          v-model="role"
-          placeholder="e.g. Frontend Developer, UI Engineer, Web Developer"
-        />
-      </label>
-      <label
-        >Update location
-        <input type="text" v-model="location" placeholder="e.g. London" />
-      </label>
-      <label
-        >Update country
-        <input type="text" v-model="country" placeholder="e.g. United Kingdom" />
-      </label>
-      <label
-        >Update preferred job posting language
-        <input type="text" v-model="preferred_language" placeholder="e.g. English" />
-      </label>
-      <label
-        >Email
-        <input type="email" v-model="email" placeholder="e.g., abc@example.com" />
-      </label>
-      <button type="submit">Update my information</button>
-    </div>
-  </form>
+  <div class="tool">
+    <h1>Hello {{ initialData?.email }}</h1>
+    <p class="form-intro">Fill in or update your job search details below.</p>
+    <form @submit.prevent="handleSubmit">
+      <div class="container">
+        <label
+          >Update your CV (optional — leave empty to keep your current one)
+          <input type="file" id="file" @change="get_cv" accept=".pdf, .txt" />
+        </label>
+        <label
+          >Update desired job titles (comma-separated, at least 3)
+          <input
+            type="text"
+            v-model="role"
+            placeholder="e.g. Frontend Developer, UI Engineer, Web Developer"
+          />
+        </label>
+        <label
+          >Update location
+          <input type="text" v-model="location" placeholder="e.g. London" />
+        </label>
+        <label
+          >Update country
+          <input type="text" v-model="country" placeholder="e.g. United Kingdom" />
+        </label>
+        <label
+          >Update preferred job posting language
+          <input type="text" v-model="preferred_language" placeholder="e.g. English" />
+        </label>
+        <label
+          >Email
+          <input type="email" v-model="email" placeholder="e.g., abc@example.com" />
+        </label>
+        <button type="submit">Update my information</button>
+      </div>
+    </form>
+  </div>
 </template>

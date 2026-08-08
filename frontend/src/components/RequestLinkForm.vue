@@ -33,6 +33,7 @@ async function handleSubmit() {
 </script>
 
 <template>
+    <h1>Enter your email to subscribe</h1>
   <form v-if="!sent" @submit.prevent="handleSubmit" class="container">
     <label
       >Email
