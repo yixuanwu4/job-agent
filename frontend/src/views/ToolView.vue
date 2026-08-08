@@ -6,6 +6,8 @@ import SubscribeForm from '@/components/SubscribeForm.vue'
 import { type SubscriberInfo, type ReportResponse } from '@/types'
 import ReportResults from '@/components/ReportResults.vue'
 import RequestLinkForm from '@/components/RequestLinkForm.vue'
+import LoadingState from '@/components/LoadingState.vue'
+import { REPORT_LOADING_MESSAGES, SUBSCRIBE_LOADING_MESSAGES } from '@/constants.ts'
 
 interface SearchPayload {
   cv: File | null
@@ -24,6 +26,18 @@ const route = useRoute()
 const subscriberInfo = ref<SubscriberInfo | null>(null)
 const tokenError = ref('')
 const subscribeMode = computed(() => route.query.mode === 'subscribe')
+
+const currentView = computed(() => {
+  if (isLoading.value) return 'loading-report'
+  if (isSubscribing.value) return 'loading-subscribe'
+  if (report.value) return 'report'
+  if (errorMessage.value) return 'report-error'
+  if (subscribeSuccess.value) return 'subscribe-success'
+  if (subscribeError.value) return 'subscribe-error'
+  if (subscriberInfo.value) return 'subscribe-form'
+  if (subscribeMode.value) return 'request-link'
+  return 'search'
+})
 
 const isSubscribing = ref(false)
 const subscribeError = ref('')
@@ -144,21 +158,24 @@ async function handleSubscribeSubmit(payload: {
 
 <template>
   <div class="tool">
-    <SearchForm v-if="!subscriberInfo && !subscribeMode" @submit-search="handleSubmit" />
-
-    <RequestLinkForm v-if="subscribeMode && !subscriberInfo" />
-
+    <SearchForm v-if="currentView === 'search'" @submit-search="handleSubmit" />
+    <RequestLinkForm v-if="currentView === 'request-link'" />
     <SubscribeForm
-      v-if="subscriberInfo"
+      v-if="currentView === 'subscribe-form'"
       :initial-data="subscriberInfo"
       @submit-subscribe="handleSubscribeSubmit"
     />
-    <p v-if="subscribeError">{{ subscribeError }}</p>
-    <p v-if="subscribeSuccess">Your subscription has been updated!</p>
 
-    <p v-if="isLoading">Generating your report... this can take up to a minute.</p>
-    <p v-else-if="errorMessage">{{ errorMessage }}</p>
-    <ReportResults v-else-if="report" :report="report" />
+    <LoadingState v-if="currentView === 'loading-report'" :messages="REPORT_LOADING_MESSAGES" />
+    <LoadingState
+      v-if="currentView === 'loading-subscribe'"
+      :messages="SUBSCRIBE_LOADING_MESSAGES"
+    />
+
+    <p v-if="currentView === 'subscribe-error'">{{ subscribeError }}</p>
+    <p v-if="currentView === 'subscribe-success'">Your subscription has been updated!</p>
+    <p v-if="currentView === 'report-error'">{{ errorMessage }}</p>
+    <ReportResults v-if="currentView === 'report'" :report="report!" />
   </div>
 </template>
 
