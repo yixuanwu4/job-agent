@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from 'vue-router'
 <template>
   <header>
     <div class="logo">
-      <a>
+      <a href="/">
         <img src="../src/assets/job.png" />
       </a>
     </div>
