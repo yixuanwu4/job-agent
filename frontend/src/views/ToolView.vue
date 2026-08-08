@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import SearchForm from '@/components/SearchForm.vue'
 import SubscribeForm from '@/components/SubscribeForm.vue'
@@ -22,6 +22,7 @@ const errorMessage = ref('')
 const route = useRoute()
 const subscriberInfo = ref<SubscriberInfo | null>(null)
 const tokenError = ref('')
+const subscribeMode = computed(() => route.query.mode === 'subscribe')
 
 const isSubscribing = ref(false)
 const subscribeError = ref('')
@@ -126,10 +127,10 @@ async function handleSubscribeSubmit(payload: {
 
 <template>
   <div class="tool">
-    <SearchForm v-if="!subscriberInfo" @submit-search="handleSubmit" />
+    <SearchForm v-if="!subscriberInfo && !subscribeMode" @submit-search="handleSubmit" />
 
     <SubscribeForm
-      v-if="subscriberInfo"
+      v-if="subscriberInfo || subscribeMode"
       :initial-data="subscriberInfo"
       @submit-subscribe="handleSubscribeSubmit"
     />

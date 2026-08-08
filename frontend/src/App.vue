@@ -4,8 +4,11 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
+    <div class="logo">
+      <a>
+        <img src="../src/assets/job.png" />
+      </a>
+    </div>
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink>
@@ -21,18 +24,28 @@ import { RouterLink, RouterView } from 'vue-router'
 header {
   line-height: 1.5;
   max-height: 100vh;
+  padding-inline: 2rem;
 }
 
 .logo {
   display: block;
-  margin: 0 auto 2rem;
+  width: 4rem;
+  height: 4rem;
+  margin: 2rem;
+  overflow: hidden;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 nav {
   width: 100%;
   font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
 }
 
 nav a.router-link-exact-active {
@@ -46,11 +59,7 @@ nav a.router-link-exact-active:hover {
 nav a {
   display: inline-block;
   padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
+  border-left: 2px solid var(--color-border);
 }
 
 @media (min-width: 1024px) {
@@ -58,10 +67,6 @@ nav a:first-of-type {
     display: flex;
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
   }
 
   header .wrapper {
@@ -76,7 +81,6 @@ nav a:first-of-type {
     font-size: 1rem;
 
     padding: 1rem 0;
-    margin-top: 1rem;
   }
 }
 </style>
