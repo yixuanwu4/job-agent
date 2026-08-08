@@ -49,7 +49,7 @@ watch(() => props.messages, startCycle)
       />
     </svg>
     <Transition name="fade" mode="out-in">
-      <p :key="currentIndex">{{ currentMessage }}</p>
+      <h3 :key="currentIndex">{{ currentMessage }}</h3>
     </Transition>
   </div>
 </template>
@@ -62,11 +62,13 @@ watch(() => props.messages, startCycle)
   gap: var(--space-5);
   padding: var(--space-9) var(--space-5);
   text-align: center;
+  height: 80vh;
+  justify-content: center;
 }
 
 .briefcase {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
 }
 
 .briefcase path {
@@ -85,12 +87,6 @@ watch(() => props.messages, startCycle)
   100% {
     stroke-dashoffset: -1;
   }
-}
-
-.loading-state p {
-  color: var(--color-text-muted);
-  font-size: var(--color-text);
-  max-width: 320px;
 }
 
 .fade-enter-active,
