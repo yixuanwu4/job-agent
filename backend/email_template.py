@@ -40,3 +40,29 @@ def build_digest_text(jobs: list[dict], report_url:str) -> str:
         lines.append(f"  {j['url']}\n")
     lines.append(f"View full report: {report_url}")
     return "\n".join(lines)
+
+def build_update_link_html(manage_url: str) -> str:
+    return f"""
+    <div style="background-color: #f4f4f5; padding: 40px 20px;">
+        <table style="width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+            <tr><td style="padding: 40px 32px;">
+                <h1 style="font-size: 22px; color: #1a1a1a; margin: 0 0 16px;">Manage your job search</h1>
+                <p style="font-size: 15px; color: #444; line-height: 1.6; margin: 0 0 24px;">
+                    Click below to fill in or update your job search details.
+                    This link is unique to you — don't share it.
+                </p>
+                <a href="{manage_url}" style="display: inline-block; padding: 14px 28px; background: #1a1a1a; color: #fff; text-decoration: none; border-radius: 8px; font-size: 15px; font-weight: 600;">
+                    Update my information →
+                </a>
+            </td></tr>
+        </table>
+    </div>
+    """
+
+def build_update_link_text(manage_url: str) -> str:
+    return (
+        "Manage your job search\n\n"
+        "Click the link below to fill in or update your job search details. "
+        "This link is unique to you — don't share it.\n\n"
+        f"{manage_url}"
+    )

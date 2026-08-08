@@ -68,3 +68,11 @@ def get_subscriber_by_email(email: str) -> dict | None:
     if not response.data:
         return None
     return response.data[0]
+
+def create_subscriber_placeholder(email: str) -> dict:
+    response = (
+        supabase.table("subscribers")
+        .upsert({"email": email, "active": True}, on_conflict="email")
+        .execute()
+    )
+    return response.data[0]
