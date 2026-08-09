@@ -9,12 +9,13 @@
 /* ---------- Semantic tokens ---------- */
 :root {
   --color-background: var(--raw-paper);
-  --color-surface: var(--raw-mist);
   --color-text: var(--raw-ink);
   --color-text-muted: rgba(23, 24, 26, 0.6);
   --color-heading: var(--raw-ink);
   --color-border: var(--raw-ink);
   --color-border-hover: rgba(23, 24, 26, 0.16);
+  --color-accent: var(--raw-ink);
+  --color-accent-soft: var(--raw-grey);
 }
 
 /* ---------- Type ---------- */
