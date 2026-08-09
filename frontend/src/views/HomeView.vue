@@ -11,14 +11,12 @@ import { RouterLink } from 'vue-router'
           Upload your CV, add what you're looking for, and see how you match — right now, or every
           morning by subscribing.
         </p>
-        <RouterLink to="/tool" class="cta">Try it now — no signup, nothing saved</RouterLink>
       </section>
       <section class="paths">
         <RouterLink to="/tool" class="path-card path-card--try">
           <h2>Try it once</h2>
           <p>
-            Upload your CV, get your matches, done. Nothing is saved unless you choose to subscribe
-            below.
+            Upload your CV, get your matches, done. Nothing is saved unless you choose to subscribe.
           </p>
           <div class="card-image-placeholder">
             <span>Screenshot: instant report email</span>
@@ -64,7 +62,7 @@ import { RouterLink } from 'vue-router'
   margin: 0 auto var(--space-6);
 }
 
-.cta {
+/* .cta {
   display: inline-block;
   background: var(--color-accent);
   color: var(--raw-paper);
@@ -72,7 +70,7 @@ import { RouterLink } from 'vue-router'
   border-radius: var(--radius-control);
   font-weight: 600;
   text-decoration: none;
-}
+} */
 
 .cta:hover {
   text-decoration: none;
