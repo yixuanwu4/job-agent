@@ -16,6 +16,7 @@
   --color-border-hover: rgba(23, 24, 26, 0.16);
   --color-accent: var(--raw-ink);
   --color-accent-soft: var(--raw-grey);
+  --color-danger: #c0392b;
 }
 
 /* ---------- Type ---------- */

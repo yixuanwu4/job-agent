@@ -103,7 +103,7 @@ function handleSubmit() {
           This will permanently delete your email, CV, and search preferences. This cannot be
           undone.
         </p>
-        <button type="button" @click="emit('confirm-unsubscribe')">Yes, delete my data</button>
+        <button type="button" class="btn-danger" @click="emit('confirm-unsubscribe')">Yes, delete my data</button>
         <button type="button" class="text-link" @click="showUnsubscribeConfirm = false">
           Cancel
         </button>
@@ -111,3 +111,45 @@ function handleSubmit() {
     </div>
   </div>
 </template>
+
+<style>
+.unsubscribe-section {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  text-align: center;
+}
+
+.text-link {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.text-link:hover {
+  color: var(--color-text);
+}
+
+.unsubscribe-confirm p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.unsubscribe-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: var(--raw-paper);
+  border: none;
+  height: 1.6rem;
+}
+</style>
