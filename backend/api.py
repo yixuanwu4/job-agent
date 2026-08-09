@@ -18,6 +18,7 @@ from resume_analyzer import ResumeAnalyzer
 from supabase_client import (
     add_subscriber,
     create_subscriber_placeholder,
+    delete_subscriber,
     download_cv,
     get_subscriber_by_token,
     upload_cv,
@@ -211,3 +212,14 @@ async def request_subscribe_link(email: str = Form(...)):
     except Exception as e:
         print(f"Error sending subscribe link: {e}")
         return {"error": "Something went wrong, please try again."}
+
+@app.post("/unsubscribe")
+async def unsubscribe(token: str = Form(...)):
+    try:
+        deleted = delete_subscriber(token)
+        if not deleted:
+            return {"error": "This link is no longer valid."}
+        return {"status": "unsubscribed"}
+    except Exception as e:
+        print(f"Error unsubscribing: {e}")
+        return {"error": "Something went wrong. Please try again."}

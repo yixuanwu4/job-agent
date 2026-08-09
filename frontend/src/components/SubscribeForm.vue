@@ -16,21 +16,21 @@ const emit = defineEmits<{
       preferred_language: string
     },
   ]
+  'confirm-unsubscribe': []
 }>()
 
 const cv = ref<File | null>(null)
-const email = ref('')
 const role = ref('')
 const location = ref('')
 const country = ref('')
 const preferred_language = ref('')
+const showUnsubscribeConfirm = ref(false)
 
 watch(
   () => props.initialData,
   (newData) => {
     if (newData) {
       country.value = newData?.country
-      email.value = newData?.email
       role.value = newData?.role
       location.value = newData?.location
       preferred_language.value = newData?.preferred_language
@@ -85,12 +85,29 @@ function handleSubmit() {
           >Update preferred job posting language
           <input type="text" v-model="preferred_language" placeholder="e.g. English" />
         </label>
-        <label
-          >Email
-          <input type="email" v-model="email" placeholder="e.g., abc@example.com" />
-        </label>
         <button type="submit">Update my information</button>
       </div>
     </form>
+    <div class="unsubscribe-section">
+      <button
+        v-if="!showUnsubscribeConfirm"
+        type="button"
+        class="text-link"
+        @click="showUnsubscribeConfirm = true"
+      >
+        Unsubscribe
+      </button>
+
+      <div v-else class="unsubscribe-confirm">
+        <p>
+          This will permanently delete your email, CV, and search preferences. This cannot be
+          undone.
+        </p>
+        <button type="button" @click="emit('confirm-unsubscribe')">Yes, delete my data</button>
+        <button type="button" class="text-link" @click="showUnsubscribeConfirm = false">
+          Cancel
+        </button>
+      </div>
+    </div>
   </div>
 </template>

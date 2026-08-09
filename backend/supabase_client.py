@@ -76,3 +76,13 @@ def create_subscriber_placeholder(email: str) -> dict:
         .execute()
     )
     return response.data[0]
+
+def delete_subscriber(token: str) -> bool:
+    subscriber = get_subscriber_by_token(token)
+    if subscriber is None:
+        return False
+    cv_path = subscriber.get("cv_storage_path")
+    if cv_path:
+        supabase.storage.from_("resumes").remove([cv_path])
+    supabase.table("subscribers").delete().eq("token", token).execute()
+    return True

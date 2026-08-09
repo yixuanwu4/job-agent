@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { onMounted, ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import SearchForm from '@/components/SearchForm.vue'
 import SubscribeForm from '@/components/SubscribeForm.vue'
 import { type SubscriberInfo, type ReportResponse } from '@/types'
@@ -30,6 +30,7 @@ const subscribeMode = computed(() => route.query.mode === 'subscribe')
 const currentView = computed(() => {
   if (isLoading.value) return 'loading-report'
   if (isSubscribing.value) return 'loading-subscribe'
+  if (unsubscribed.value) return 'unsubscribed'
   if (report.value) return 'report'
   if (errorMessage.value) return 'report-error'
   if (subscribeSuccess.value) return 'subscribe-success'
@@ -48,9 +49,7 @@ onMounted(async () => {
   const reportToken = route.query.report_token as string
 
   if (editToken) {
-    const response = await fetch(
-      `https://job-agent-odvr.onrender.com/subscriber-by-token?token=${editToken}`,
-    )
+    const response = await fetch(`http://127.0.0.1:8000/subscriber-by-token?token=${editToken}`)
     const data = await response.json()
     if (data.error) {
       tokenError.value = data.error
@@ -61,9 +60,7 @@ onMounted(async () => {
 
   if (reportToken) {
     isLoading.value = true
-    const response = await fetch(
-      `https://job-agent-odvr.onrender.com/report-by-token?token=${reportToken}`,
-    )
+    const response = await fetch(`http://127.0.0.1:8000/report-by-token?token=${reportToken}`)
     const data = await response.json()
     isLoading.value = false
     if (data.error) {
@@ -85,7 +82,7 @@ async function handleSubmit(payload: SearchPayload) {
   errorMessage.value = ''
   report.value = null
 
-  const url = 'https://job-agent-odvr.onrender.com/report'
+  const url = 'http://127.0.0.1:8000/report'
 
   const formData = new FormData()
   formData.append('cv', payload.cv)
@@ -124,7 +121,7 @@ async function handleSubscribeSubmit(payload: {
   subscribeError.value = ''
   subscribeSuccess.value = false
 
-  const url = 'https://job-agent-odvr.onrender.com/subscribe'
+  const url = 'http://127.0.0.1:8000/subscribe'
   const editToken = route.query.token as string
 
   const formData = new FormData()
@@ -154,6 +151,47 @@ async function handleSubscribeSubmit(payload: {
     isSubscribing.value = false
   }
 }
+
+const isUnsubscribing = ref(false)
+const unsubscribed = ref(false)
+const router = useRouter()
+const countdown = ref(3)
+
+async function handleConfirmUnsubscribe() {
+  isUnsubscribing.value = true
+  const editToken = route.query.token as string
+
+  const formData = new FormData()
+  formData.append('token', editToken)
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/unsubscribe', {
+      method: 'POST',
+      body: formData,
+    })
+    const data = await response.json()
+    if (data.error) {
+      subscribeError.value = data.error
+      return
+    }
+    unsubscribed.value = true
+  } catch {
+    subscribeError.value = 'Something went wrong. Please try again.'
+  } finally {
+    isUnsubscribing.value = false
+  }
+}
+
+watch(unsubscribed, (isUnsubscribed) => {
+  if (!isUnsubscribed) return
+  const timer = setInterval(() => {
+    countdown.value -= 1
+    if (countdown.value <= 0) {
+      clearInterval(timer)
+      router.push('/')
+    }
+  }, 1000)
+})
 </script>
 
 <template>
@@ -164,7 +202,12 @@ async function handleSubscribeSubmit(payload: {
       v-if="currentView === 'subscribe-form'"
       :initial-data="subscriberInfo"
       @submit-subscribe="handleSubscribeSubmit"
+      @confirm-unsubscribe="handleConfirmUnsubscribe"
     />
+    <div v-if="currentView === 'unsubscribed'">
+      <h1>You've been unsubscribed</h1>
+      <p>Redirecting to the homepage in {{ countdown }}...</p>
+    </div>
 
     <LoadingState v-if="currentView === 'loading-report'" :messages="REPORT_LOADING_MESSAGES" />
     <LoadingState
