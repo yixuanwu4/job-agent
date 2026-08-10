@@ -26,7 +26,7 @@ defineProps<{
   </div>
 </template>
 
-<style>
+<style scoped>
 .report-results {
   max-width: 720px;
   margin: 0 auto;

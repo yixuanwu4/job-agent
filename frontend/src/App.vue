@@ -16,22 +16,24 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 header {
+  position: sticky;
   padding-inline: 2rem;
   display: flex;
   align-items: center;
 }
 
 .logo-link {
+  position: relative;
   height: 4rem;
   width: 4rem;
-  margin: 2rem;
+  margin: 2.5rem;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
 }
 </style>
