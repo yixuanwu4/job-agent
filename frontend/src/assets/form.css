@@ -74,6 +74,13 @@ button[type='submit']:disabled {
   cursor: not-allowed;
 }
 
+.form-hint {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: var(--space-2);
+}
+
 .field-error {
   color: var(--color-danger);
   font-size: var(--text-sm);
