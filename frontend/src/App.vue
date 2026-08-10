@@ -12,7 +12,6 @@ import { RouterLink, RouterView } from 'vue-router'
   <main>
     <RouterView />
   </main>
-  
 </template>
 
 <style scoped>
@@ -27,7 +26,6 @@ header {
   width: 4rem;
   margin: 2rem;
 }
-
 
 @media (min-width: 1024px) {
   header {
