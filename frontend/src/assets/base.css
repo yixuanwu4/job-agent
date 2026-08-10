@@ -79,6 +79,10 @@ body {
   line-height: 1.2;
 }
 
+main {
+  padding: var(--space-8) var(--space-4) var(--space-8);
+}
+
 h1,
 h2,
 h3 {

@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <main class="home">
+  <div class="home">
     <div class="grid-frame">
       <section class="hero">
         <h1>Invest your time on the most matched jobs</h1>
@@ -35,14 +35,13 @@ import { RouterLink } from 'vue-router'
         </RouterLink>
       </section>
     </div>
-  </main>
+  </div>
 </template>
 
 <style scoped>
 .home {
   max-width: 1000px;
   margin: 0 auto;
-  padding: var(--space-9) var(--space-4) var(--space-8);
 }
 
 .hero {
