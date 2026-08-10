@@ -9,6 +9,7 @@ from countries import get_country_code, get_country_name
 from email_client import send_email
 from email_template import build_update_link_html, build_update_link_text
 from pipeline import (
+    filter_jobs_by_age,
     get_matched_jobs_multi,
     jobs_to_text,
     parse_roles,
@@ -158,8 +159,9 @@ async def get_report_by_token(token: str):
 
         roles = parse_roles(subscriber["role"])
         jobs = get_matched_jobs_multi(
-            roles, subscriber["location"], 10, subscriber["country"], subscriber["preferred_language"],
+            roles, subscriber["location"], 50, subscriber["country"], subscriber["preferred_language"],
         )
+        jobs = filter_jobs_by_age(jobs, max_age_days=1)
 
         analyzer = ResumeAnalyzer(tmp_path)
         for j in jobs:
