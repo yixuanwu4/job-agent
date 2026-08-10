@@ -22,4 +22,5 @@ export interface SubscriberInfo {
   location: string
   country: string
   preferred_language: string
+  has_cv: boolean
 }

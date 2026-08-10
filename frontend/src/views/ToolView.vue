@@ -49,9 +49,7 @@ onMounted(async () => {
   const reportToken = route.query.report_token as string
 
   if (editToken) {
-    const response = await fetch(
-      `http://127.0.0.1:8000/subscriber-by-token?token=${editToken}`,
-    )
+    const response = await fetch(`http://127.0.0.1:8000/subscriber-by-token?token=${editToken}`)
     const data = await response.json()
     if (data.error) {
       tokenError.value = data.error
@@ -62,9 +60,7 @@ onMounted(async () => {
 
   if (reportToken) {
     isLoading.value = true
-    const response = await fetch(
-      `http://127.0.0.1:8000/report-by-token?token=${reportToken}`,
-    )
+    const response = await fetch(`http://127.0.0.1:8000/report-by-token?token=${reportToken}`)
     const data = await response.json()
     isLoading.value = false
     if (data.error) {
@@ -161,7 +157,7 @@ const unsubscribed = ref(false)
 const router = useRouter()
 const countdown = ref(3)
 
-async function handleConfirmUnsubscribe(){
+async function handleConfirmUnsubscribe() {
   isUnsubscribing.value = true
   const editToken = route.query.token as string
 
@@ -210,7 +206,7 @@ watch(unsubscribed, (isUnsubscribed) => {
     />
     <div v-if="currentView === 'unsubscribed'">
       <h1>You've been unsubscribed</h1>
-      <p>Redirecting to the homepage in {{  countdown }}...</p>
+      <p>Redirecting to the homepage in {{ countdown }}...</p>
     </div>
 
     <LoadingState v-if="currentView === 'loading-report'" :messages="REPORT_LOADING_MESSAGES" />

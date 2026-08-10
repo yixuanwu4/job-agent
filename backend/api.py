@@ -187,19 +187,6 @@ async def get_report_by_token(token: str):
         if tmp_path:
             os.remove(tmp_path)
 
-@app.get("/subscriber-by-token")
-async def get_subscriber_info(token: str):
-    subscriber = get_subscriber_by_token(token)
-    if subscriber is None:
-        return {"error": "This link is no longer valid."}
-    return {
-        "email": subscriber["email"],
-        "role": subscriber["role"],
-        "location": subscriber["location"],
-        "country": get_country_name(subscriber["country"]),
-        "preferred_language": subscriber["preferred_language"],
-    }
-
 @app.post("/request-subscribe-link")
 async def request_subscribe_link(email: str = Form(...)):
     try:
@@ -223,3 +210,17 @@ async def unsubscribe(token: str = Form(...)):
     except Exception as e:
         print(f"Error unsubscribing: {e}")
         return {"error": "Something went wrong. Please try again."}
+
+@app.get("/subscriber-by-token")
+async def get_subscriber_info(token: str):
+    subscriber = get_subscriber_by_token(token)
+    if subscriber is None:
+        return {"error": "This link is no longer valid."}
+    return {
+        "email": subscriber["email"],
+        "role": subscriber["role"] or "",
+        "location": subscriber["location"] or "",
+        "country": get_country_name(subscriber["country"]) if subscriber.get("country") else "",
+        "preferred_language": subscriber["preferred_language"] or "",
+        "has_cv": bool(subscriber.get("cv_storage_path")),
+    }
