@@ -84,7 +84,7 @@ async function handleSubmit(payload: SearchPayload) {
   errorMessage.value = ''
   report.value = null
 
-  const url = '${API_BASE_URL}/report'
+  const url = `${API_BASE_URL}/report`
 
   const formData = new FormData()
   formData.append('cv', payload.cv)
@@ -123,7 +123,7 @@ async function handleSubscribeSubmit(payload: {
   subscribeError.value = ''
   subscribeSuccess.value = false
 
-  const url = '${API_BASE_URL}/subscribe'
+  const url = `${API_BASE_URL}/subscribe`
   const editToken = route.query.token as string
 
   const formData = new FormData()
@@ -167,7 +167,7 @@ async function handleConfirmUnsubscribe() {
   formData.append('token', editToken)
 
   try {
-    const response = await fetch('${API_BASE_URL}/unsubscribe', {
+    const response = await fetch(`${API_BASE_URL}/unsubscribe`, {
       method: 'POST',
       body: formData,
     })
