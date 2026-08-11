@@ -38,7 +38,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-FRONTEND_BASE_URL = "https://job-agent.yixuan.ch"
+FRONTEND_BASE_URL = "https://job-agent.yixuan.ch/#"
 
 @app.get("/health")
 def health_check():
