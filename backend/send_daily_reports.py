@@ -7,7 +7,7 @@ from pipeline import filter_jobs_by_age, get_matched_jobs_multi, parse_roles, so
 from resume_analyzer import ResumeAnalyzer
 from supabase_client import download_cv, get_active_subscribers
 
-REPORT_BASE_URL = "https://yixuanwu4.github.io/job-agent/tool"
+REPORT_BASE_URL = "https://job-agent.yixuan.ch/tool"
 
 def process_subscriber(subscriber: dict):
     tmp_path = None

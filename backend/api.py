@@ -30,7 +30,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://yixuanwu4.github.io",
+        "https://job-agent.yixuan.ch",
         "http://localhost:5173",
         ],
     allow_credentials=True,
@@ -38,7 +38,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-FRONTEND_BASE_URL = "https://yixuanwu4.github.io/job-agent"
+FRONTEND_BASE_URL = "https://job-agent.yixuan.ch"
 
 @app.get("/health")
 def health_check():
