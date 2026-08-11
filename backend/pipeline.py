@@ -71,15 +71,14 @@ def get_matched_jobs(
 
 def get_matched_jobs_multi(roles: list[str], location: str, num_results: int, country: str, preferred_language: str) -> list[dict]:
     all_jobs = []
-    seen_urls = set()
+    seen = set()
     for role in roles:
         jobs = get_matched_jobs(role, location, num_results, country, preferred_language)
-        print(f"'{role}' returned {len(jobs)} jobs") 
         for j in jobs:
-            if j["url"] not in seen_urls:
-                seen_urls.add(j["url"])
+            key = (j["title"], j["company"], j["description"])
+            if key not in seen:
+                seen.add(key)
                 all_jobs.append(j)
-    print(f"After dedup: {len(all_jobs)} unique jobs")  
     return all_jobs[:num_results]
 
 
