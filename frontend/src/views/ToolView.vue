@@ -18,6 +18,8 @@ interface SearchPayload {
   sort_by: string
 }
 
+const API_BASE_URL = 'https://job-agent-odvr.onrender.com'
+
 const report = ref<ReportResponse | null>(null)
 const isLoading = ref(false)
 const errorMessage = ref('')
@@ -49,7 +51,7 @@ onMounted(async () => {
   const reportToken = route.query.report_token as string
 
   if (editToken) {
-    const response = await fetch(`http://127.0.0.1:8000/subscriber-by-token?token=${editToken}`)
+    const response = await fetch(`${API_BASE_URL}/subscriber-by-token?token=${editToken}`)
     const data = await response.json()
     if (data.error) {
       tokenError.value = data.error
@@ -60,7 +62,7 @@ onMounted(async () => {
 
   if (reportToken) {
     isLoading.value = true
-    const response = await fetch(`http://127.0.0.1:8000/report-by-token?token=${reportToken}`)
+    const response = await fetch(`${API_BASE_URL}/report-by-token?token=${reportToken}`)
     const data = await response.json()
     isLoading.value = false
     if (data.error) {
@@ -82,7 +84,7 @@ async function handleSubmit(payload: SearchPayload) {
   errorMessage.value = ''
   report.value = null
 
-  const url = 'http://127.0.0.1:8000/report'
+  const url = '${API_BASE_URL}/report'
 
   const formData = new FormData()
   formData.append('cv', payload.cv)
@@ -121,7 +123,7 @@ async function handleSubscribeSubmit(payload: {
   subscribeError.value = ''
   subscribeSuccess.value = false
 
-  const url = 'http://127.0.0.1:8000/subscribe'
+  const url = '${API_BASE_URL}/subscribe'
   const editToken = route.query.token as string
 
   const formData = new FormData()
@@ -165,7 +167,7 @@ async function handleConfirmUnsubscribe() {
   formData.append('token', editToken)
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/unsubscribe', {
+    const response = await fetch('${API_BASE_URL}/unsubscribe', {
       method: 'POST',
       body: formData,
     })
