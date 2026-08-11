@@ -1,9 +1,9 @@
 /* ---------- Raw palette ---------- */
 :root {
   --raw-ink: #17181a;
-  --raw-paper: #ffffff;
+  --raw-paper: #f4f4f4;
   --raw-white: #ffffff;
-  --raw-grey: #f5f5f7;
+  --raw-grey: #f9f9f9;
 }
 
 /* ---------- Semantic tokens ---------- */
@@ -13,7 +13,6 @@
   --color-text-muted: rgba(23, 24, 26, 0.6);
   --color-heading: var(--raw-ink);
   --color-border: var(--raw-ink);
-  --color-border-hover: rgba(23, 24, 26, 0.16);
   --color-accent: var(--raw-ink);
   --color-accent-soft: var(--raw-grey);
   --color-danger: #c0392b;
@@ -81,6 +80,7 @@ body {
 
 main {
   padding: var(--space-8) var(--space-4) var(--space-8);
+  background-color: ;
 }
 
 h1,
