@@ -8,12 +8,18 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 20px;
+
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(245, 247, 248, 0.52));
+  border: 1px solid rgba(20, 20, 20, 0.16);
+  border-radius: var(--radius-card);
+
   padding: var(--space-7);
   width: 480px;
   margin: 0 auto;
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 12px 40px rgba(0, 0, 0, 0.04);
 }
 
 label {
@@ -32,12 +38,20 @@ select {
   font-family: var(--font-body);
   font-size: var(--text-base);
   color: var(--color-text);
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
+
+  background: var(--raw-white);
+  border: 1px solid rgba(20, 20, 20, 0.14);
+
   border-radius: var(--radius-control);
   padding: var(--space-3);
+
   appearance: none;
   -webkit-appearance: none;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 select {
@@ -63,15 +77,26 @@ button[type='submit'] {
   padding: var(--space-3) var(--space-5);
   margin-top: var(--space-2);
   cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    box-shadow 0.2s ease;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 button[type='submit']:hover {
-  opacity: 0.85;
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
 button[type='submit']:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .form-hint {

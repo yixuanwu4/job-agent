@@ -78,24 +78,16 @@ header {
   position: fixed;
   top: 0;
   left: 0;
-  width: 800px;
-  height: 800px;
+  width: 1000px;
+  height: 1000px;
   margin-left: -250px;
   margin-top: -250px;
   border-radius: 50%;
   pointer-events: none;
-  opacity: 0.8;
-  filter: blur(60px);
+  opacity: 0.5;
+  filter: blur(100px);
   z-index: 1;
-  background: conic-gradient(
-    from 180deg,
-    #ff2ec4,
-    #7b2ff7,
-    #0091ff,
-    #01a780,
-    #c1a502,
-    #ff2ec4
-  );
+  background: conic-gradient(from 180deg, #ff2ec4, #7b2ff7, #0091ff, #01a780, #c1a502, #ff2ec4);
   mask-image: radial-gradient(circle, black 0%, black 40%, transparent 75%);
   -webkit-mask-image: radial-gradient(circle, black 0%, black 40%, transparent 75%);
   mix-blend-mode: overlay;

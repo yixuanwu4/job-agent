@@ -13,6 +13,7 @@
   --color-text-muted: rgba(23, 24, 26, 0.6);
   --color-heading: var(--raw-ink);
   --color-border: var(--raw-ink);
+  --color-card-border: rgba(20, 20, 20, 0.24);
   --color-accent: var(--raw-ink);
   --color-accent-soft: var(--raw-grey);
   --color-danger: #c0392b;
@@ -31,6 +32,7 @@
   --text-hero: 3.25rem;
   --text-xl: 2rem;
   --text-lg: 1.375rem;
+  --text-md: 1.25rem;
   --text-base: 1rem;
   --text-sm: 0.875rem;
   --text-mono: 0.9375rem;
@@ -80,7 +82,7 @@ body {
 
 main {
   padding: var(--space-8) var(--space-4) var(--space-8);
-  background-color: ;
+  background-color:;
 }
 
 h1,
@@ -99,6 +101,10 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+button {
+  font-family: var(--font-body);
 }
 
 :focus-visible {
