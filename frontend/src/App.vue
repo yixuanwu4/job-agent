@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { ref, onMounted, onUnmounted } from 'vue'
+import SiteFooter from '@/components/SiteFooter.vue'
 
 const glowRef = ref<HTMLElement | null>(null)
 
@@ -36,22 +37,35 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header>
-    <RouterLink to="/" class="logo-link" aria-label="Back to homepage">
-      <img alt="Job Agent logo" class="logo" src="@/assets/job.png" />
-    </RouterLink>
-  </header>
+  <div class="app-shell">
+    <header>
+      <RouterLink to="/" class="logo-link" aria-label="Back to homepage">
+        <img alt="Job Agent logo" class="logo" src="@/assets/job.png" />
+      </RouterLink>
+    </header>
 
-  <main>
-    <Teleport to="body">
-      <div ref="glowRef" class="siri-glow" aria-hidden="true"></div>
-    </Teleport>
+    <main class="app-main">
+      <Teleport to="body">
+        <div ref="glowRef" class="siri-glow" aria-hidden="true"></div>
+      </Teleport>
 
-    <RouterView />
-  </main>
+      <RouterView />
+    </main>
+    <SiteFooter />
+  </div>
 </template>
 
 <style scoped>
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+}
+
 header {
   position: sticky;
   padding-inline: 2rem;
