@@ -10,12 +10,11 @@
       <p><a href="mailto:job-agent@yixuan.ch">job-agent@yixuan.ch</a></p>
 
       <p>
-        This is a personal, non-commercial project, provided free of charge. It is not operated by a registered company.
+        This is a personal, non-commercial project, provided free of charge. It is not operated by a
+        registered company.
       </p>
 
-      <p>
-        Responsible for the content of this website: Yixuan Wu, contact details as above.
-      </p>
+      <p>Responsible for the content of this website: Yixuan Wu, contact details as above.</p>
     </div>
   </div>
 </template>

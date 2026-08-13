@@ -30,8 +30,8 @@ const router = createRouter({
     {
       path: '/terms',
       name: 'terms',
-      component: TermsView
-    }
+      component: TermsView,
+    },
   ],
 })
 

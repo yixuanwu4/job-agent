@@ -4,13 +4,12 @@
 
     <h2>What's collected</h2>
     <p>
-      If you generate a one-off report, your CV is read into memory to
-      produce the report and then discarded - nothing is stored.
+      If you generate a one-off report, your CV is read into memory to produce the report and then
+      discarded - nothing is stored.
     </p>
     <p>
-      If you subscribe, your email address, CV, and search preferences
-      (job titles, location, country, preferred language) are stored so
-      the daily job can run.
+      If you subscribe, your email address, CV, and search preferences (job titles, location,
+      country, preferred language) are stored so the daily job can run.
     </p>
 
     <h2>Who it's shared with</h2>
@@ -23,15 +22,14 @@
 
     <h2>How long it's kept</h2>
     <p>
-      Subscriber data is kept until you unsubscribe. Unsubscribing
-      permanently deletes your database record and CV file — this is not
-      reversible.
+      Subscriber data is kept until you unsubscribe. Unsubscribing permanently deletes your database
+      record and CV file — this is not reversible.
     </p>
 
     <h2>Your rights</h2>
     <p>
-      To ask what's stored about you, or to have it removed outside of
-      the unsubscribe flow, contact <a href="mailto:job-agent@yixuan.ch" >job-agent@yixuan.ch</a>.
+      To ask what's stored about you, or to have it removed outside of the unsubscribe flow, contact
+      <a href="mailto:job-agent@yixuan.ch">job-agent@yixuan.ch</a>.
     </p>
   </div>
 </template>
