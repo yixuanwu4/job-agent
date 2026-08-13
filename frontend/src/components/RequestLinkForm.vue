@@ -33,7 +33,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div v-if="!sent">
+  <div class="subscribe" v-if="!sent">
     <h1>Enter your email to subscribe</h1>
     <form @submit.prevent="handleSubmit" class="container">
       <label
@@ -57,6 +57,17 @@ async function handleSubmit() {
 </template>
 
 <style scoped>
+.subscribe {
+  display: flex;
+  flex-direction: column;
+  margin-block: var(--space-4);
+  gap: var(--space-4);
+}
+
+h1 {
+  margin-inline: var(--space-4);
+}
+
 .hint {
   display: flex;
   flex-direction: column;

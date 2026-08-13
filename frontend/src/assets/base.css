@@ -82,7 +82,7 @@ body {
 
 main {
   padding: var(--space-8) var(--space-4) var(--space-8);
-  background-color:var(--color-background);
+  background-color: var(--color-background);
 }
 
 h1,

@@ -111,3 +111,10 @@ button[type='submit']:disabled {
   font-size: var(--text-sm);
   margin-top: var(--space-1);
 }
+
+@media (max-width: 640px) {
+  .container {
+    max-width: 360px;
+    padding: var(--space-4);
+  }
+}

@@ -95,8 +95,13 @@ header {
 }
 
 @media (max-width: 640px) {
+  header {
+    padding-inline: var(--space-4);
+  }
+
   .logo-link {
     margin-inline-start: 0;
+    margin-bottom: var(--space-4);
   }
 }
 </style>
