@@ -30,16 +30,20 @@ defineProps<{
 .report-results {
   max-width: 720px;
   margin: 0 auto;
-  padding: var(--space-6) var(--space-4);
+  padding: 0 var(--space-4);
 }
 
 .report-results > *:last-child {
   border-bottom: none;
 }
 
+.jobs-section {
+  margin-bottom: var(--space-3);
+}
+
 .jobs-section h2 {
   font-size: var(--text-lg);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
 }
 
 .logo {
@@ -54,10 +58,18 @@ defineProps<{
   width: 4rem;
   height: 4rem;
 }
+
 .logo img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
+}
+
+@media (max-width: 640px) {
+  .report-results {
+    max-width: 360px;
+    padding: var(--space-4) 0;
+  }
 }
 </style>
