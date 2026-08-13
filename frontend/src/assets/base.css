@@ -82,7 +82,7 @@ body {
 
 main {
   padding: var(--space-8) var(--space-4) var(--space-8);
-  background-color:;
+  background-color:var(--color-background);
 }
 
 h1,
@@ -115,4 +115,10 @@ button {
 ::selection {
   background: var(--color-accent-soft);
   color: var(--color-ink);
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: var(--space-4);
+  }
 }

@@ -93,4 +93,10 @@ header {
   mix-blend-mode: overlay;
   will-change: transform;
 }
+
+@media (max-width: 640px) {
+  .logo-link {
+    margin-inline-start: 0;
+  }
+}
 </style>
