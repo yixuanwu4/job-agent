@@ -2,7 +2,7 @@ COUNTRY_CODES: dict[str, str] = {
     "norway": "no",
     "sweden": "se",
     "united kingdom": "gb",
-    "netherland": "nl",
+    "netherlands": "nl",
     "switzerland": "ch",
     "belgium": "be",
     "germany": "de",

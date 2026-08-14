@@ -99,7 +99,21 @@ function handleSubmit() {
         </label>
         <label
           >Country
-          <input type="text" v-model="country" placeholder="e.g. United Kingdom" />
+          <select v-model="country">
+            <option value="" disabled>Select a country</option>
+            <option value="Switzerland">Switzerland</option>
+            <option value="Norway">Norway</option>
+            <option value="Sweden">Sweden</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="Netherlands">Netherlands</option>
+            <option value="Belgium">Belgium</option>
+            <option value="Germany">Germany</option>
+            <option value="Austria">Austria</option>
+            <option value="France">France</option>
+            <option value="Italy">Italy</option>
+            <option value="Portugal">Portugal</option>
+            <option value="Spain">Spain</option>
+          </select>
           <span v-if="fieldErrors.country" class="field-error">{{ fieldErrors.country }}</span>
         </label>
         <label
