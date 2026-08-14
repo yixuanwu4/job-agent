@@ -11,17 +11,14 @@
     </div>
 
     <div id="profile">
-        <h2>The profile</h2>
-        <p>This project is presented on the following platform:</p>
-        <ul>
-            <li>
-                <a href="https://github.com/yixuanwu4/job-agent">
-                    GitHub
-                </a>
-            </li>
-        </ul>
+      <h2>The profile</h2>
+      <p>This project is presented on the following platform:</p>
+      <ul>
+        <li>
+          <a href="https://github.com/yixuanwu4/job-agent"> GitHub </a>
+        </li>
+      </ul>
     </div>
-    
   </div>
 </template>
 
@@ -38,18 +35,18 @@ p {
 }
 
 a {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 li {
-    line-height: 1.6;
+  line-height: 1.6;
 }
 
 #general {
-    margin-block-start: var(--space-4);
+  margin-block-start: var(--space-4);
 }
 
 #profile {
-    margin-top: var(--space-8);
+  margin-top: var(--space-8);
 }
 </style>
