@@ -1,24 +1,27 @@
 <script setup lang="ts">
 const props = defineProps<{
-    modelValue: string[]
-    options: string[]
+  modelValue: string[]
+  options: string[]
 }>()
 const emit = defineEmits<{
-    'update:modelValue': [value: string[]]
+  'update:modelValue': [value: string[]]
 }>()
 
-function addLanguage(event: Event){
-    const select = event.target as HTMLSelectElement
-    const lang = select.value
-    if (!lang || props.modelValue.includes(lang)) {
-        return
-    }
-    emit('update:modelValue', [...props.modelValue, lang])
-    select.value = ''
+function addLanguage(event: Event) {
+  const select = event.target as HTMLSelectElement
+  const lang = select.value
+  if (!lang || props.modelValue.includes(lang)) {
+    return
+  }
+  emit('update:modelValue', [...props.modelValue, lang])
+  select.value = ''
 }
 
-function removeLanguage(lang: string){
-    emit('update:modelValue', props.modelValue.filter((l) => l !== lang))
+function removeLanguage(lang: string) {
+  emit(
+    'update:modelValue',
+    props.modelValue.filter((l) => l !== lang),
+  )
 }
 </script>
 
@@ -27,7 +30,9 @@ function removeLanguage(lang: string){
     <div class="language-tags" v-if="modelValue.length">
       <span v-for="lang in modelValue" :key="lang" class="language-tag">
         {{ lang }}
-        <button type="button" @click="removeLanguage(lang)" :aria-label="`Remove ${lang}`">×</button>
+        <button type="button" @click="removeLanguage(lang)" :aria-label="`Remove ${lang}`">
+          ×
+        </button>
       </span>
     </div>
 

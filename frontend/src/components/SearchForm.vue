@@ -84,12 +84,7 @@ function handleSubmit() {
       <div class="container">
         <label>
           Upload your CV (PDF or TXT)
-          <input
-            id="file"
-            type="file"
-            accept=".pdf, .txt"
-            @change="get_cv"
-          />
+          <input id="file" type="file" accept=".pdf, .txt" @change="get_cv" />
           <span v-if="fieldErrors.cv" class="field-error">
             {{ fieldErrors.cv }}
           </span>
@@ -109,11 +104,7 @@ function handleSubmit() {
 
         <label>
           Location
-          <input
-            v-model="location"
-            type="text"
-            placeholder="e.g. London"
-          />
+          <input v-model="location" type="text" placeholder="e.g. London" />
           <span v-if="fieldErrors.location" class="field-error">
             {{ fieldErrors.location }}
           </span>
@@ -144,8 +135,7 @@ function handleSubmit() {
         <label>
           Preferred job posting language
 
-          <LanguagePicker v-model="preferred_language" :options=SUPPORTED_LANGUAGES
-          />
+          <LanguagePicker v-model="preferred_language" :options="SUPPORTED_LANGUAGES" />
 
           <span v-if="fieldErrors.preferred_language" class="field-error">
             {{ fieldErrors.preferred_language }}
