@@ -5,3 +5,5 @@ export const REPORT_LOADING_MESSAGES = [
 ]
 
 export const SUBSCRIBE_LOADING_MESSAGES = ['Saving your updated details...', 'Almost done...']
+
+export const SUPPORTED_LANGUAGES = ['English', 'German', 'French', 'Italian', 'Spanish', 'Dutch', 'Portuguese']
