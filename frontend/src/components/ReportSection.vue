@@ -38,13 +38,16 @@ const htmlContent = computed(() => converter.makeHtml(props.content))
 }
 
 .markdown-content :deep(h1) {
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
+  font-weight: 700;
 }
 .markdown-content :deep(h2) {
   font-size: var(--text-base);
+  font-weight: 700;
 }
 .markdown-content :deep(h3) {
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
+  font-weight: 600;
 }
 
 .markdown-content :deep(p) {
