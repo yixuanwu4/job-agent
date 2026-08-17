@@ -12,6 +12,7 @@ from pipeline import (
     filter_jobs_by_age,
     get_matched_jobs_multi,
     jobs_to_text,
+    parse_languages,
     parse_roles,
     sort_jobs,
 )
@@ -32,13 +33,14 @@ app.add_middleware(
     allow_origins=[
         "https://job-agent.yixuan.ch",
         "http://localhost:5173",
-        ],
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 FRONTEND_BASE_URL = "https://job-agent.yixuan.ch/#"
+
 
 @app.get("/health")
 def health_check():
@@ -65,7 +67,10 @@ async def generate_report(
 
         country_code = get_country_code(country)
         roles = parse_roles(role)
-        jobs = get_matched_jobs_multi(roles, location, num_results, country_code, preferred_language)
+        parsed_preferred_language = parse_languages(preferred_language)
+        jobs = get_matched_jobs_multi(
+            roles, location, num_results, country_code, parsed_preferred_language
+        )
 
         analyzer = ResumeAnalyzer(tmp_path)
         for j in jobs:
@@ -108,7 +113,7 @@ async def create_subscription(
     preferred_language: str = Form(...),
     token: str = Form(...),
 ):
-    subscriber= get_subscriber_by_token(token)
+    subscriber = get_subscriber_by_token(token)
     if subscriber is None:
         return {"error": "This link is no longer valid."}
     email = subscriber["email"]
@@ -143,6 +148,7 @@ async def create_subscription(
         print(f"Error subscribing our website: {e}")
         return {"error": "Something went wrong while subscribing. Please try again."}
 
+
 @app.get("/report-by-token")
 async def get_report_by_token(token: str):
     subscriber = get_subscriber_by_token(token)
@@ -159,7 +165,11 @@ async def get_report_by_token(token: str):
 
         roles = parse_roles(subscriber["role"])
         jobs = get_matched_jobs_multi(
-            roles, subscriber["location"], 50, subscriber["country"], subscriber["preferred_language"],
+            roles,
+            subscriber["location"],
+            50,
+            subscriber["country"],
+            parse_languages(subscriber["preferred_language"]),
         )
         jobs = filter_jobs_by_age(jobs, max_age_days=1)
 
@@ -180,14 +190,15 @@ async def get_report_by_token(token: str):
             "jobs": jobs,
             "skills_advice": skills,
             "interview_prep": interview,
-            "application_strategy": strategy
+            "application_strategy": strategy,
         }
     except Exception as e:
         print(f"Error generating report by token: {e}")
         return {"error": "Something went wrong while generating your report."}
-    finally: 
+    finally:
         if tmp_path:
             os.remove(tmp_path)
+
 
 @app.post("/request-subscribe-link")
 async def request_subscribe_link(email: str = Form(...)):
@@ -202,6 +213,7 @@ async def request_subscribe_link(email: str = Form(...)):
         print(f"Error sending subscribe link: {e}")
         return {"error": "Something went wrong, please try again."}
 
+
 @app.post("/unsubscribe")
 async def unsubscribe(token: str = Form(...)):
     try:
@@ -213,6 +225,7 @@ async def unsubscribe(token: str = Form(...)):
         print(f"Error unsubscribing: {e}")
         return {"error": "Something went wrong. Please try again."}
 
+
 @app.get("/subscriber-by-token")
 async def get_subscriber_info(token: str):
     subscriber = get_subscriber_by_token(token)
@@ -222,7 +235,9 @@ async def get_subscriber_info(token: str):
         "email": subscriber["email"],
         "role": subscriber["role"] or "",
         "location": subscriber["location"] or "",
-        "country": get_country_name(subscriber["country"]) if subscriber.get("country") else "",
+        "country": get_country_name(subscriber["country"])
+        if subscriber.get("country")
+        else "",
         "preferred_language": subscriber["preferred_language"] or "",
         "has_cv": bool(subscriber.get("cv_storage_path")),
     }

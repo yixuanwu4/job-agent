@@ -19,6 +19,7 @@ def filter_jobs_by_age(jobs: list[dict], max_age_days: int) -> list[dict]:
             filtered.append(j)
     return filtered
 
+
 def format_date(iso_string: str) -> str:
     try:
         dt = datetime.fromisoformat(iso_string)
@@ -27,14 +28,24 @@ def format_date(iso_string: str) -> str:
     except ValueError:
         return "Unknown"
 
+
 def parse_roles(role_string: str) -> list[str]:
     roles = [r.strip() for r in role_string.split(",") if r.strip()]
     if len(roles) < 3:
         raise ValueError("Please enter at least 3 job titles, separated by commas.")
     return roles
 
+
+def parse_languages(language_string: str) -> list[str]:
+    return [l.strip() for l in language_string.split(",") if l.strip()]
+
+
 def get_matched_jobs(
-    role: str, location: str, num_results: int, country: str, preferred_language: str
+    role: str,
+    location: str,
+    num_results: int,
+    country: str,
+    preferred_language: list[str],
 ) -> list[dict]:
     fetch_count = 50  # Adzuna max fetch number
     app_id = os.environ["ADZUNA_APP_ID"]
@@ -69,11 +80,19 @@ def get_matched_jobs(
     return jobs[:num_results]
 
 
-def get_matched_jobs_multi(roles: list[str], location: str, num_results: int, country: str, preferred_language: str) -> list[dict]:
+def get_matched_jobs_multi(
+    roles: list[str],
+    location: str,
+    num_results: int,
+    country: str,
+    preferred_language: str,
+) -> list[dict]:
     all_jobs = []
     seen = set()
     for role in roles:
-        jobs = get_matched_jobs(role, location, num_results, country, preferred_language)
+        jobs = get_matched_jobs(
+            role, location, num_results, country, preferred_language
+        )
         for j in jobs:
             key = (j["title"], j["company"], j["description"])
             if key not in seen:

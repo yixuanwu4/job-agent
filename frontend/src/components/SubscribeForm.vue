@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { SubscriberInfo } from '@/types'
+import LanguagePicker from './LanguagePicker.vue'
+import { SUPPORTED_LANGUAGES } from '@/constants'
 
 const props = defineProps<{
   initialData?: SubscriberInfo | null
@@ -13,7 +15,7 @@ const emit = defineEmits<{
       role: string
       location: string
       country: string
-      preferred_language: string
+      preferred_language: string[]
     },
   ]
   'confirm-unsubscribe': []
@@ -23,7 +25,7 @@ const cv = ref<File | null>(null)
 const role = ref('')
 const location = ref('')
 const country = ref('')
-const preferred_language = ref('')
+const preferred_language = ref<string[]>([])
 const showUnsubscribeConfirm = ref(false)
 
 const fieldErrors = ref<Record<string, string>>({})
@@ -56,8 +58,8 @@ function validate(): boolean {
     errors.country = 'Country is required.'
   }
 
-  if (preferred_language.value == null || !preferred_language.value.trim()) {
-    errors.preferred_language = 'Preferred language is required.'
+  if (preferred_language.value.length === 0) {
+    errors.preferred_language = 'Select at least one language.'
   }
 
   fieldErrors.value = errors
@@ -71,7 +73,9 @@ watch(
       country.value = newData?.country
       role.value = newData?.role
       location.value = newData?.location
-      preferred_language.value = newData?.preferred_language
+      preferred_language.value = newData.preferred_language
+        ? newData?.preferred_language.split(',').map((l) => l.trim())
+        : []
     }
   },
   { immediate: true },
@@ -141,7 +145,7 @@ function handleSubmit() {
         </label>
         <label
           >Update preferred job posting language
-          <input type="text" v-model="preferred_language" placeholder="e.g. English" />
+          <LanguagePicker v-model="preferred_language" :options="SUPPORTED_LANGUAGES" />
           <span v-if="fieldErrors.preferred_language" class="field-error">{{
             fieldErrors.preferred_language
           }}</span>
