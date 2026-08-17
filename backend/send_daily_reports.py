@@ -3,11 +3,18 @@ import tempfile
 
 from email_client import send_email
 from email_template import build_digest_html, build_digest_text
-from pipeline import filter_jobs_by_age, get_matched_jobs_multi, parse_roles, sort_jobs
+from pipeline import (
+    filter_jobs_by_age,
+    get_matched_jobs_multi,
+    parse_roles,
+    parse_languages,
+    sort_jobs,
+)
 from resume_analyzer import ResumeAnalyzer
 from supabase_client import download_cv, get_active_subscribers
 
 REPORT_BASE_URL = "https://job-agent.yixuan.ch/#/tool"
+
 
 def process_subscriber(subscriber: dict):
     tmp_path = None
@@ -20,8 +27,11 @@ def process_subscriber(subscriber: dict):
 
         roles = parse_roles(subscriber["role"])
         jobs = get_matched_jobs_multi(
-            roles, subscriber["location"], 50,
-            subscriber["country"], subscriber["preferred_language"],
+            roles,
+            subscriber["location"],
+            50,
+            subscriber["country"],
+            parse_languages(subscriber["preferred_language"]),
         )
         jobs = filter_jobs_by_age(jobs, max_age_days=1)
         print(f"After 24h filter: {len(jobs)} jobs")
@@ -40,7 +50,9 @@ def process_subscriber(subscriber: dict):
         manage_url = f"{REPORT_BASE_URL}?token={subscriber['token']}"
         html = build_digest_html(jobs, report_url, manage_url)
         text = build_digest_text(jobs, report_url, manage_url)
-        send_email (subscriber["email"], f"{len(jobs)} new job matches today", html, text)
+        send_email(
+            subscriber["email"], f"{len(jobs)} new job matches today", html, text
+        )
         print(f"Sent to {subscriber['email']}")
 
     except Exception as e:
@@ -49,11 +61,13 @@ def process_subscriber(subscriber: dict):
         if tmp_path:
             os.remove(tmp_path)
 
+
 def main():
     subscribers = get_active_subscribers()
     print(f"Processing {len(subscribers)} subscribers...")
     for sub in subscribers:
         process_subscriber(sub)
+
 
 if __name__ == "__main__":
     main()

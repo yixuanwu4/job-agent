@@ -1,4 +1,4 @@
-def build_digest_html(jobs: list[dict], report_url:str, manage_url: str) -> str:
+def build_digest_html(jobs: list[dict], report_url: str, manage_url: str) -> str:
     job_rows = ""
     for i, j in enumerate(jobs):
         bg_color = "#fafafa" if i % 2 == 0 else "#ffffff"
@@ -6,8 +6,8 @@ def build_digest_html(jobs: list[dict], report_url:str, manage_url: str) -> str:
         job_rows += f"""
         <tr>
         <td style="padding: 16px; background-color: {bg_color}; border-bottom: 1px solid #eee;">
-            <a href="{job_url}" style="font-size: 16px; color: #1a1a1a; text-decoration: none; font-weight: 600;">{j['title']}</a>
-            <div style="font-size: 13px; color: #666; margin-top: 2px;">{j['company']} · {j['location']}</div>
+            <a href="{job_url}" style="font-size: 16px; color: #1a1a1a; text-decoration: none; font-weight: 600;">{j["title"]}</a>
+            <div style="font-size: 13px; color: #666; margin-top: 2px;">{j["company"]} · {j["location"]}</div>
         </td>
         </tr>
         """
@@ -36,7 +36,8 @@ def build_digest_html(jobs: list[dict], report_url:str, manage_url: str) -> str:
     </div>
     """
 
-def build_digest_text(jobs: list[dict], report_url:str, manage_url: str) -> str:
+
+def build_digest_text(jobs: list[dict], report_url: str, manage_url: str) -> str:
     lines = [f"{len(jobs)} new opportunities today\n"]
     for j in jobs:
         lines.append(f"- {j['title']} at {j['company']} ({j['location']})")
@@ -44,6 +45,7 @@ def build_digest_text(jobs: list[dict], report_url:str, manage_url: str) -> str:
     lines.append(f"\nSee today's best matches: {report_url}")
     lines.append(f"\nUpdate your search or unsubscribe: {manage_url}")
     return "\n".join(lines)
+
 
 def build_update_link_html(manage_url: str) -> str:
     return f"""
@@ -62,6 +64,7 @@ def build_update_link_html(manage_url: str) -> str:
         </table>
     </div>
     """
+
 
 def build_update_link_text(manage_url: str) -> str:
     return (

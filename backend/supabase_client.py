@@ -50,9 +50,11 @@ def upload_cv(file_bytes: bytes, filename: str, email: str) -> str:
     )
     return path
 
+
 def download_cv(cv_storage_path: str) -> bytes:
     response = supabase.storage.from_("resumes").download(cv_storage_path)
     return response
+
 
 def get_subscriber_by_token(token: str) -> dict | None:
     response = supabase.table("subscribers").select("*").eq("token", token).execute()
@@ -63,11 +65,13 @@ def get_subscriber_by_token(token: str) -> dict | None:
         return None
     return subscriber
 
+
 def get_subscriber_by_email(email: str) -> dict | None:
     response = supabase.table("subscribers").select("*").eq("email", email).execute()
     if not response.data:
         return None
     return response.data[0]
+
 
 def create_subscriber_placeholder(email: str) -> dict:
     response = (
@@ -76,6 +80,7 @@ def create_subscriber_placeholder(email: str) -> dict:
         .execute()
     )
     return response.data[0]
+
 
 def delete_subscriber(token: str) -> bool:
     subscriber = get_subscriber_by_token(token)

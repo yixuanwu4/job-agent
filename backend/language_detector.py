@@ -9,10 +9,15 @@ class LanguageDetector:
         "de": ["german", "deutsch"],
         "fr": ["french", "français"],
         "it": ["italian", "italiano"],
+        "es": ["spanish", "español"],
+        "nl": ["nederlands", "dutch"],
+        "pt": ["portuguese", "português"],
     }
 
-    def __init__(self, preferred_language: str):
-        self.preferred_language = preferred_language.lower()
+    def __init__(self, preferred_languages: str):
+        self.preferred_languages = {
+            language.lower() for language in preferred_languages
+        }
 
     def matches_preferred_language(self, description: str) -> bool:
         try:
@@ -22,7 +27,7 @@ class LanguageDetector:
         allowed_names = self.LANGUAGE_NAMES.get(detected_code)
         if allowed_names is None:
             return False
-        return self.preferred_language in allowed_names
+        return bool(self.preferred_languages.intersection(allowed_names))
 
     def filter_jobs_by_language(self, jobs: list[dict]) -> list[dict]:
         return [j for j in jobs if self.matches_preferred_language(j["description"])]

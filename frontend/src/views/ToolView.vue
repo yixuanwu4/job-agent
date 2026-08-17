@@ -14,7 +14,7 @@ interface SearchPayload {
   role: string
   location: string
   country: string
-  preferred_language: string
+  preferred_language: string[]
   sort_by: string
 }
 
@@ -86,12 +86,13 @@ async function handleSubmit(payload: SearchPayload) {
 
   const url = `${API_BASE_URL}/report`
 
+  const all_preferred_languages = payload.preferred_language.join(', ')
   const formData = new FormData()
   formData.append('cv', payload.cv)
   formData.append('role', payload.role)
   formData.append('location', payload.location)
   formData.append('country', payload.country)
-  formData.append('preferred_language', payload.preferred_language)
+  formData.append('preferred_language', all_preferred_languages)
   formData.append('sort_by', payload.sort_by)
 
   try {
@@ -117,7 +118,7 @@ async function handleSubscribeSubmit(payload: {
   role: string
   location: string
   country: string
-  preferred_language: string
+  preferred_language: string[]
 }) {
   isSubscribing.value = true
   subscribeError.value = ''
@@ -134,7 +135,8 @@ async function handleSubscribeSubmit(payload: {
   formData.append('role', payload.role)
   formData.append('location', payload.location)
   formData.append('country', payload.country)
-  formData.append('preferred_language', payload.preferred_language)
+  const all_preferred_languages = payload.preferred_language.toString()
+  formData.append('preferred_language', all_preferred_languages)
 
   try {
     const response = await fetch(url, { method: 'POST', body: formData })
