@@ -6,8 +6,8 @@ from email_template import build_digest_html, build_digest_text
 from pipeline import (
     filter_jobs_by_age,
     get_matched_jobs_multi,
-    parse_roles,
     parse_languages,
+    parse_roles,
     sort_jobs,
 )
 from resume_analyzer import ResumeAnalyzer
