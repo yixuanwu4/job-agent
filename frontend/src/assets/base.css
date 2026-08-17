@@ -113,8 +113,8 @@ button {
 }
 
 ::selection {
-  background: var(--color-accent-soft);
-  color: var(--color-ink);
+  background: var(--color-accent);
+  color: var(--raw-paper);
 }
 
 @media (max-width: 640px) {
